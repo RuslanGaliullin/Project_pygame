@@ -115,7 +115,7 @@ def start_screen():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN and not drawing:
                 pole = load_level('level.txt')
                 a = generate_level(pole)
                 for i in range(len(pole)):
@@ -123,16 +123,24 @@ def start_screen():
                 player = a[0]
                 drawing = True
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT and drawing:
-                if pole[player.rect.y//50][player.rect.x//50 - 1] != '#':
+                if pole[player.rect.y // 50][player.rect.x // 50 - 1] != '#':
+                    pole[player.rect.y // 50][player.rect.x // 50] = '.'
+                    pole[player.rect.y // 50][player.rect.x // 50 - 1] = '@'
                     player.rect.x -= 50
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT and drawing:
                 if pole[player.rect.y // 50][player.rect.x // 50 + 1] != '#':
+                    pole[player.rect.y // 50][player.rect.x // 50] = '.'
+                    pole[player.rect.y // 50][player.rect.x // 50 + 1] = '@'
                     player.rect.x += 50
             if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN and drawing:
-                if pole[player.rect.y // 50 +1][player.rect.x // 50] != '#':
+                if pole[player.rect.y // 50 + 1][player.rect.x // 50] != '#':
+                    pole[player.rect.y // 50][player.rect.x // 50] = '.'
+                    pole[player.rect.y // 50 + 1][player.rect.x // 50] = '@'
                     player.rect.y += 50
             if event.type == pygame.KEYDOWN and event.key == pygame.K_UP and drawing:
                 if pole[player.rect.y // 50 - 1][player.rect.x // 50] != '#':
+                    pole[player.rect.y // 50][player.rect.x // 50] = '.'
+                    pole[player.rect.y // 50 - 1][player.rect.x // 50] = '@'
                     player.rect.y -= 50
         tiles_group.draw(screen)
         player_group.draw(screen)
