@@ -3,7 +3,7 @@ import os
 
 import pygame
 
-from board import Board
+from Camer import Camera
 
 FPS = 50
 pygame.init()
@@ -121,31 +121,51 @@ def start_screen():
                 for i in range(len(pole)):
                     pole[i] = list(pole[i])
                 player = a[0]
+                x_player = player.rect.x // 50
+                y_player = player.rect.y // 50
                 drawing = True
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT and drawing:
-                if pole[player.rect.y // 50][player.rect.x // 50 - 1] != '#':
-                    pole[player.rect.y // 50][player.rect.x // 50] = '.'
-                    pole[player.rect.y // 50][player.rect.x // 50 - 1] = '@'
+                if pole[y_player][x_player - 1] != '#':
+                    pole[y_player][x_player] = '.'
+                    pole[y_player][x_player - 1] = '@'
                     player.rect.x -= 50
+                    x_player -= 1
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT and drawing:
-                if pole[player.rect.y // 50][player.rect.x // 50 + 1] != '#':
-                    pole[player.rect.y // 50][player.rect.x // 50] = '.'
-                    pole[player.rect.y // 50][player.rect.x // 50 + 1] = '@'
+                if pole[y_player][x_player + 1] != '#':
+                    pole[y_player][x_player] = '.'
+                    pole[y_player][x_player + 1] = '@'
                     player.rect.x += 50
+                    x_player += 1
             if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN and drawing:
-                if pole[player.rect.y // 50 + 1][player.rect.x // 50] != '#':
-                    pole[player.rect.y // 50][player.rect.x // 50] = '.'
-                    pole[player.rect.y // 50 + 1][player.rect.x // 50] = '@'
+                if pole[y_player + 1][x_player] != '#':
+                    pole[y_player][x_player] = '.'
+                    pole[y_player + 1][x_player] = '@'
                     player.rect.y += 50
+                    y_player += 1
             if event.type == pygame.KEYDOWN and event.key == pygame.K_UP and drawing:
-                if pole[player.rect.y // 50 - 1][player.rect.x // 50] != '#':
-                    pole[player.rect.y // 50][player.rect.x // 50] = '.'
-                    pole[player.rect.y // 50 - 1][player.rect.x // 50] = '@'
+                if pole[y_player - 1][x_player] != '#':
+                    pole[y_player][x_player] = '.'
+                    pole[y_player - 1][x_player] = '@'
                     player.rect.y -= 50
+                    y_player -= 1
+        if drawing:
+            if 5 <= y_player < len(pole) - 5:
+                flag_y = True
+            else:
+                flag_y = False
+            if 5 <= x_player < len(pole[0]) - 5:
+                flag_x = True
+            else:
+                flag_x = False
+            camera.update(player, flag_x, flag_y)
+            # обновляем положение всех спрайтов
+            for sprite in all_sprites:
+                camera.apply(sprite)
         tiles_group.draw(screen)
         player_group.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)
 
 
+camera = Camera()
 start_screen()
