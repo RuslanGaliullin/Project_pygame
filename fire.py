@@ -62,7 +62,7 @@ while running:
         if event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
             push.update(5)
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            ball = Ball(second_all_sprites, push.angle, 100, push.rect[0], push.rect[1])
+            ball = Ball(second_all_sprites, push.angle, 50, push.rect[0], push.rect[1])
             flying = True
     if flying:
         ball.update()
