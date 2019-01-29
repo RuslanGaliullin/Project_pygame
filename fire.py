@@ -1,7 +1,16 @@
 import pygame
 import os
 
-second_all_sprites =
+pygame.init()
+second_all_sprites = pygame.sprite.Group()
+pushka_sprite = pygame.sprite.Group()
+ground_sprite = pygame.sprite.Group()
+mishen_sprite = pygame.sprite.Group()
+
+screen = pygame.display.set_mode((500, 500))
+screen2 = pygame.Surface(screen.get_size())
+
+
 def load_image(name, colorkey=None):
     fullname = os.path.join('data', name)
     try:
@@ -15,19 +24,34 @@ def load_image(name, colorkey=None):
             colorkey = image.get_at((0, 0))
         image.set_colorkey(colorkey)
     return image
+
+
+pushka_image = load_image('pushka.png')
+
+
 class Pushka(pygame.sprite.Sprite):
-    def __init__(self, pos_x, pos_y):
-        super().__init__(player_group, all_sprites)
-        self.image = player_image
-        self.rect = self.image.get_rect().move(
-            tile_width * pos_x, tile_height * pos_y)
+    def __init__(self):
+        super().__init__(pushka_sprite, second_all_sprites)
+        self.image = pushka_image
+        self.rect = (0, 0)
+        self.angle = 0
+
+    def update(self, angle):
+        self.angle += angle
+        self.image = pygame.transform.rotate(screen, self.angle)
+
 
 player_image = load_image('pushka.png')
-screen = pygame.display.set_mode((500, 500))
-screen2 = pygame.Surface(screen.get_size())
+
 running = True
+push = Pushka()
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    screen2.
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
+            push.update(5)
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
+            push.update(-5)
+    second_all_sprites.draw(screen)
+    pygame.display.flip()
