@@ -28,5 +28,5 @@ class Walls(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = pos[0]
         self.rect.y = pos[1]
-        self.rect.width = 9  # like size of the every part of board - 1
-        self.rect.height = 9
+        self.rect.width = 27  # like size of the every part of board.cell_size - 1
+        self.rect.height = 0
