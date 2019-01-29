@@ -12,7 +12,7 @@ pushka_sprite = pygame.sprite.Group()
 ground_sprite = pygame.sprite.Group()
 mishen_sprite = pygame.sprite.Group()
 
-screen = pygame.display.set_mode((500, 500))
+screen = pygame.display.set_mode((1000, 1000))
 screen2 = pygame.Surface(screen.get_size())
 
 
@@ -51,8 +51,9 @@ player_image = load_image('pushka.png')
 running = True
 flying = False
 push = Pushka()
+clock = pygame.time.Clock()
 while running:
-    screen.fill((random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
+    screen.fill((0, 0, 255))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -61,9 +62,11 @@ while running:
         if event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
             push.update(5)
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            ball = Ball(second_all_sprites, push.angle, 10, push.rect.x, push.rect.y)
+            print(push.angle)
+            ball = Ball(second_all_sprites, push.angle, 1, push.rect[0], push.rect[1])
             flying = True
     if flying:
         ball.update()
     second_all_sprites.draw(screen)
+    clock.tick(50)
     pygame.display.flip()
