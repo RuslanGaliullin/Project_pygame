@@ -63,10 +63,9 @@ while running:
             push.update(5)
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             print(push.angle)
-            ball = Ball(second_all_sprites, push.angle, 30, push.rect[0], push.rect[1])
+            ball = Ball(second_all_sprites, push.angle, 100, push.rect[0], push.rect[1])
             flying = True
     if flying:
         ball.update()
     second_all_sprites.draw(screen)
-    clock.tick(120)
     pygame.display.flip()
