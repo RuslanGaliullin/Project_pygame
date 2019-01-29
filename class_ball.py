@@ -43,7 +43,6 @@ class Ball(pygame.sprite.Sprite):
         self.rect.y = int(self.rect.x * math.tan(math.radians(self.a)) - (9.8 * self.rect.x ** 2) / (
                 2 * self.v ** 2 * math.cos(math.radians(self.a)) ** 2)) + self.top
 
-    # Поручим бомбочке получать событие и взрываться (поменяем картинку)
     def get_event(self, event):
         pass
 
