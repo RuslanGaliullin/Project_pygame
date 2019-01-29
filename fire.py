@@ -1,7 +1,10 @@
 import pygame
 import os
+import random
 
 pygame.init()
+
+pygame.key.set_repeat(200, 70)
 second_all_sprites = pygame.sprite.Group()
 pushka_sprite = pygame.sprite.Group()
 ground_sprite = pygame.sprite.Group()
@@ -38,7 +41,7 @@ class Pushka(pygame.sprite.Sprite):
 
     def update(self, angle):
         self.angle += angle
-        self.image = pygame.transform.rotate(screen, self.angle)
+        self.image = pygame.transform.rotate(pushka_image, self.angle)
 
 
 player_image = load_image('pushka.png')
@@ -46,6 +49,7 @@ player_image = load_image('pushka.png')
 running = True
 push = Pushka()
 while running:
+    screen.fill((random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
