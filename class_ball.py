@@ -32,14 +32,13 @@ class Ball(pygame.sprite.Sprite):
         super().__init__(group)
         self.image = Ball.image
         self.rect = self.image.get_rect()
-        self.rect.x = x
+        self.rect.x = 0
         self.top = y
-        self.rect.y = y
+        self.rect.y = 0
         self.v = v
         self.a = a
 
     def update(self):
-        print(self.rect.x, self.rect.y)
         self.rect.x += 1
         self.rect.y = self.top - (int(self.rect.x * math.tan(math.radians(self.a)) - (9.8 * self.rect.x ** 2) / (
                 2 * self.v ** 2 * math.cos(math.radians(self.a)) ** 2)))
