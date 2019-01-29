@@ -3,7 +3,7 @@ import os
 
 
 def load_image(name, colorkey=None):
-    fullname = os.path.join('pictures', name)
+    fullname = os.path.join('data', name)
     try:
         image = pygame.image.load(fullname)
 

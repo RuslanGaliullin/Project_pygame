@@ -13,7 +13,7 @@ pygame.key.set_repeat(200, 70)
 
 
 def load_image(name, colorkey=None):
-    fullname = os.path.join('pictures', name)
+    fullname = os.path.join('data', name)
     try:
         image = pygame.image.load(fullname)
     except pygame.error as message:
@@ -33,7 +33,7 @@ def terminate():
 
 
 def load_level(filename):
-    filename = "pictures/" + filename
+    filename = "data/" + filename
     # читаем уровень, убирая символы перевода строки
     with open(filename, 'r') as mapFile:
         level_map = [line.strip() for line in mapFile]
