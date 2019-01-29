@@ -62,10 +62,11 @@ while running:
         if event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
             push.update(5)
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            print(push.angle)
             ball = Ball(second_all_sprites, push.angle, 100, push.rect[0], push.rect[1])
             flying = True
     if flying:
         ball.update()
+        if ball.rect[0] >= 1000 or ball.rect[1] > push.rect[1]:
+            second_all_sprites.remove(ball)
     second_all_sprites.draw(screen)
     pygame.display.flip()

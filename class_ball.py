@@ -39,10 +39,11 @@ class Ball(pygame.sprite.Sprite):
         self.pos_x = 0
 
     def update(self):
-        self.pos_x += 1
-        self.rect.x = self.pos_x + self.left
-        self.rect.y = self.top - (int(self.pos_x * math.tan(math.radians(self.a)) - (9.8 * self.pos_x ** 2) / (
-                2 * self.v ** 2 * math.cos(math.radians(self.a)) ** 2)))
+        if self.rect.x <= 1000 and self.rect.y <= self.top:
+            self.pos_x += 1
+            self.rect.x = self.pos_x + self.left
+            self.rect.y = self.top - (int(self.pos_x * math.tan(math.radians(self.a)) - (9.8 * self.pos_x ** 2) / (
+                    2 * self.v ** 2 * math.cos(math.radians(self.a)) ** 2)))
 
     def get_event(self, event):
         pass
