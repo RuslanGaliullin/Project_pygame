@@ -2,6 +2,8 @@ import pygame
 import os
 import random
 
+from class_ball import Ball
+
 pygame.init()
 
 pygame.key.set_repeat(200, 70)
@@ -36,7 +38,7 @@ class Pushka(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__(pushka_sprite, second_all_sprites)
         self.image = pushka_image
-        self.rect = (0, 0)
+        self.rect = (255, 255)
         self.angle = 0
 
     def update(self, angle):
@@ -47,6 +49,7 @@ class Pushka(pygame.sprite.Sprite):
 player_image = load_image('pushka.png')
 
 running = True
+flying = False
 push = Pushka()
 while running:
     screen.fill((random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
@@ -54,8 +57,13 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
-            push.update(5)
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
             push.update(-5)
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
+            push.update(5)
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            ball = Ball(second_all_sprites, push.angle, 10, push.rect.x, push.rect.y)
+            flying = True
+    if flying:
+        ball.update()
     second_all_sprites.draw(screen)
     pygame.display.flip()
