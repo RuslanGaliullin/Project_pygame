@@ -55,6 +55,9 @@ push = Pushka()
 clock = pygame.time.Clock()
 fon = pygame.transform.scale(load_image('fon_zap.jpg'), (600, 500))
 
+v = 50  # пикселей в секунду
+fps = 60
+
 while running:
     screen.blit(fon, (0, 0))
     for event in pygame.event.get():
@@ -67,7 +70,7 @@ while running:
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and not flying:
             if flying:
                 second_all_sprites.remove(ball)
-            ball = Ball(second_all_sprites, push.angle, 50,
+            ball = Ball(second_all_sprites, push.angle, v,
                         push.rect[0] + int(math.cos(math.radians(push.angle)) * 50),
                         push.rect[1] - int(math.sin(math.radians(push.angle)) * 50) + push.angle * 0.6)
             flying = True
@@ -81,4 +84,5 @@ while running:
             print(0)
     second_all_sprites.draw(screen)
     pygame.display.flip()
-    clock.tick(120)
+    d = v / fps
+    clock.tick(fps)
