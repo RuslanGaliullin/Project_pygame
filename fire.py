@@ -1,6 +1,6 @@
 import pygame
 import os
-import random
+import math
 
 from class_ball import Ball
 
@@ -12,7 +12,7 @@ pushka_sprite = pygame.sprite.Group()
 ground_sprite = pygame.sprite.Group()
 mishen_sprite = pygame.sprite.Group()
 
-screen = pygame.display.set_mode((1000, 1000))
+screen = pygame.display.set_mode((600, 500))
 screen2 = pygame.Surface(screen.get_size())
 
 
@@ -38,12 +38,13 @@ class Pushka(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__(pushka_sprite, second_all_sprites)
         self.image = pushka_image
-        self.rect = (255, 255)
+        self.rect = (60, 400)
         self.angle = 0
 
     def update(self, angle):
-        self.angle += angle
-        self.image = pygame.transform.rotate(pushka_image, self.angle)
+        if 85 >= self.angle + angle >= 0:
+            self.angle += angle
+            self.image = pygame.transform.rotate(pushka_image, self.angle)
 
 
 player_image = load_image('pushka.png')
@@ -52,8 +53,10 @@ running = True
 flying = False
 push = Pushka()
 clock = pygame.time.Clock()
+fon = pygame.transform.scale(load_image('fon_zap.jpg'), (600, 500))
+
 while running:
-    screen.fill((0, 0, 255))
+    screen.blit(fon, (0, 0))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -61,12 +64,21 @@ while running:
             push.update(-5)
         if event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
             push.update(5)
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            ball = Ball(second_all_sprites, push.angle, 50, push.rect[0], push.rect[1])
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and not flying:
+            if flying:
+                second_all_sprites.remove(ball)
+            ball = Ball(second_all_sprites, push.angle, 50,
+                        push.rect[0] + int(math.cos(math.radians(push.angle)) * 50),
+                        push.rect[1] - int(math.sin(math.radians(push.angle)) * 50) + push.angle * 0.6)
             flying = True
     if flying:
-        ball.update()
-        if ball.rect[0] >= 1000 or ball.rect[1] > push.rect[1]:
-            second_all_sprites.remove(ball)
+        try:
+            ball.update()
+            if ball.rect[0] >= 1000 or ball.rect[1] > push.rect[1]:
+                second_all_sprites.remove(ball)
+                flying = False
+        except Exception:
+            print(0)
     second_all_sprites.draw(screen)
     pygame.display.flip()
+    clock.tick(120)
