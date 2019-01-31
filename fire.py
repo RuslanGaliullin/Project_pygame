@@ -38,13 +38,15 @@ class Pushka(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__(pushka_sprite, second_all_sprites)
         self.image = pushka_image
-        self.rect = (60, 400)
+        self.rect = pygame.Rect(60, 400, 50, 50)
         self.angle = 0
 
     def update(self, angle):
-        if 85 >= self.angle + angle >= 0:
+        if 70 >= self.angle + angle >= 0:
             self.angle += angle
             self.image = pygame.transform.rotate(pushka_image, self.angle)
+            self.rect.x = 74 + (36 * math.sin(math.radians(self.angle))) - self.angle * 0.89
+            self.rect.y = 433 - (36 * math.cos(math.radians(self.angle))) - self.angle * 0.45911112
 
 
 player_image = load_image('pushka.png')
@@ -71,8 +73,8 @@ while running:
             if flying:
                 second_all_sprites.remove(ball)
             ball = Ball(second_all_sprites, push.angle, v,
-                        push.rect[0] + int(math.cos(math.radians(push.angle)) * 50),
-                        push.rect[1] - int(math.sin(math.radians(push.angle)) * 50) + push.angle * 0.6)
+                        push.rect.x + int(math.cos(math.radians(push.angle)) * 50),
+                        push.rect.y - int(math.sin(math.radians(push.angle)) * 50) + push.angle * 0.6)
             flying = True
     if flying:
         try:
