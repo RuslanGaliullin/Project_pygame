@@ -37,12 +37,17 @@ class Ball(pygame.sprite.Sprite):
         self.v = v
         self.a = a
         self.pos_x = 0
+        self.mask = pygame.mask.from_surface(self.image)
+        self.vresalsy = False
 
-    def update(self):
-        self.pos_x += 3
-        self.rect.x = self.pos_x + self.left
-        self.rect.y = self.top - (int(self.pos_x * math.tan(math.radians(self.a)) - (9.8 * self.pos_x ** 2) / (
-                2 * self.v ** 2 * math.cos(math.radians(self.a)) ** 2)))
+    def update(self, mishen_sprite):
+        if not pygame.sprite.spritecollideany(self, mishen_sprite):
+            self.pos_x += 3
+            self.rect.x = self.pos_x + self.left
+            self.rect.y = self.top - (int(self.pos_x * math.tan(math.radians(self.a)) - (9.8 * self.pos_x ** 2) / (
+                    2 * self.v ** 2 * math.cos(math.radians(self.a)) ** 2)))
+        else:
+            self.vresalsy = True
 
     def get_event(self, event):
         pass

@@ -32,6 +32,7 @@ def load_image(name, colorkey=None):
 
 
 pushka_image = load_image('pushka.png')
+mishen_image = load_image('mishen.png')
 
 
 class Pushka(pygame.sprite.Sprite):
@@ -45,8 +46,21 @@ class Pushka(pygame.sprite.Sprite):
         if 70 >= self.angle + angle >= 0:
             self.angle += angle
             self.image = pygame.transform.rotate(pushka_image, self.angle)
-            self.rect.x = 100 + (54* math.sin(math.radians(self.angle))) - self.angle
+            self.rect.x = 100 + (54 * math.sin(math.radians(self.angle))) - self.angle
             self.rect.y = 450 - (54 * math.cos(math.radians(self.angle))) - self.angle
+
+
+class Mishen(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__(mishen_sprite, second_all_sprites)
+        self.image = mishen_image
+        self.rect = self.image.get_rect()
+        self.rect.x = 400
+        self.rect.y = 350
+        self.mask = pygame.mask.from_surface(self.image)
+
+    def check(self):
+        pass
 
 
 player_image = load_image('pushka.png')
@@ -59,7 +73,7 @@ fon = pygame.transform.scale(load_image('fon_zap.jpg'), (600, 500))
 
 v = 50  # пикселей в секунду
 fps = 60
-
+mishen = Mishen()
 while running:
     screen.blit(fon, (0, 0))
     for event in pygame.event.get():
@@ -73,17 +87,19 @@ while running:
             if flying:
                 second_all_sprites.remove(ball)
             ball = Ball(second_all_sprites, push.angle, v,
-                        push.rect.x + int(math.cos(math.radians(push.angle)) * 100+ push.angle * 0.14),
+                        push.rect.x + int(math.cos(math.radians(push.angle)) * 100 + push.angle * 0.14),
                         push.rect.y - int(math.sin(math.radians(push.angle)) * 75) + push.angle * 0.84 + 10)
             flying = True
     if flying:
-        try:
-            ball.update()
-            if ball.rect[0] >= 1000 or ball.rect[1] > (push.rect[1] + 75):
-                second_all_sprites.remove(ball)
-                flying = False
-        except Exception:
-            print(0)
+        ball.update(mishen_sprite)
+        mishen.check()
+        if ball.rect[0] >= 1000 or ball.rect[1] > (push.rect[1] + 75):
+            second_all_sprites.remove(ball)
+            flying = False
+        elif ball.vresalsy:
+            clock.tick(1)
+            second_all_sprites.remove(ball)
+            flying = False
     second_all_sprites.draw(screen)
     pygame.display.flip()
     d = v / fps
