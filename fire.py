@@ -2,8 +2,6 @@ import pygame
 import os
 import math
 
-from class_ball import Ball
-
 pygame.init()
 
 pygame.key.set_repeat(200, 70)
@@ -31,36 +29,63 @@ def load_image(name, colorkey=None):
     return image
 
 
-pushka_image = load_image('pushka.png')
-mishen_image = load_image('mishen.png')
+class Ball(pygame.sprite.Sprite):
+    image = load_image("ball.png")
+
+    def __init__(self, group, a, v, x, y):
+        # НЕОБХОДИМО вызвать конструктор родительского класса Sprite.
+        # Это очень важно !!!
+        super().__init__(group)
+        self.image = Ball.image
+        self.rect = self.image.get_rect()
+        self.left = x
+        self.top = y
+        self.v = v
+        self.a = a
+        self.pos_x = 0
+        self.mask = pygame.mask.from_surface(self.image)
+        self.vresalsy = False
+
+    def update(self, mishen_sprite):
+        if not pygame.sprite.collide_mask(self, mishen):
+            self.pos_x += 3
+            self.rect.x = self.pos_x + self.left
+            self.rect.y = self.top - (int(self.pos_x * math.tan(math.radians(self.a)) - (9.8 * self.pos_x ** 2) / (
+                    2 * self.v ** 2 * math.cos(math.radians(self.a)) ** 2)))
+        else:
+            self.vresalsy = True
+
+    def get_event(self, event):
+        pass
 
 
 class Pushka(pygame.sprite.Sprite):
+    image = load_image('pushka.png')
+
     def __init__(self):
         super().__init__(pushka_sprite, second_all_sprites)
-        self.image = pushka_image
-        self.rect = pygame.Rect(80, 400, 50, 50)
+        self.image = Pushka.image
+        self.rect = pygame.Rect(100, 396, 50, 50)
         self.angle = 0
 
     def update(self, angle):
         if 70 >= self.angle + angle >= 0:
             self.angle += angle
-            self.image = pygame.transform.rotate(pushka_image, self.angle)
+            self.image = pygame.transform.rotate(Pushka.image, self.angle)
             self.rect.x = 100 + (54 * math.sin(math.radians(self.angle))) - self.angle
             self.rect.y = 450 - (54 * math.cos(math.radians(self.angle))) - self.angle
 
 
 class Mishen(pygame.sprite.Sprite):
+    image = load_image('mishen.png')
+
     def __init__(self):
         super().__init__(mishen_sprite, second_all_sprites)
-        self.image = mishen_image
+        self.image = Mishen.image
         self.rect = self.image.get_rect()
-        self.rect.x = 400
+        self.rect.x = 450
         self.rect.y = 350
         self.mask = pygame.mask.from_surface(self.image)
-
-    def check(self):
-        pass
 
 
 player_image = load_image('pushka.png')
@@ -74,10 +99,11 @@ fon = pygame.transform.scale(load_image('fon_zap.jpg'), (600, 500))
 v = 50  # пикселей в секунду
 fps = 60
 mishen = Mishen()
+lifes = 3
 while running:
     screen.blit(fon, (0, 0))
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        if event.type == pygame.QUIT or lifes == 0:
             running = False
         if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
             push.update(-5)
@@ -92,14 +118,15 @@ while running:
             flying = True
     if flying:
         ball.update(mishen_sprite)
-        mishen.check()
         if ball.rect[0] >= 1000 or ball.rect[1] > (push.rect[1] + 75):
             second_all_sprites.remove(ball)
             flying = False
+            lifes -= 1
         elif ball.vresalsy:
-            clock.tick(1)
-            second_all_sprites.remove(ball)
+            print(100)
+            clock.tick(2)
             flying = False
+            second_all_sprites.remove(ball)
     second_all_sprites.draw(screen)
     pygame.display.flip()
     d = v / fps
