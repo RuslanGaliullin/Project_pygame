@@ -4,7 +4,7 @@ import os
 import pygame
 
 from Camer import Camera
-from fire import smth
+from fire import On
 
 FPS = 50
 pygame.init()
@@ -111,6 +111,8 @@ def start_screen():
         screen.blit(string_rendered, intro_rect)
 
     drawing = False
+    second = False # активация второго холста
+    all_screens = {1:screen}
     while True:
         # all_sprites.draw(screen)
         for event in pygame.event.get():
@@ -149,14 +151,15 @@ def start_screen():
                     pole[y_player - 1][x_player] = '@'
                     player.rect.y -= 50
                     y_player -= 1
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE and drawing:
-                pass
-        if drawing:
-            if 5 <= y_player < len(pole) - 5:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE and not second and drawing:
+                smth = On()
+                second = True
+        if drawing and not second:
+            if 5 <= y_player < len(pole) - 6:
                 flag_y = True
             else:
                 flag_y = False
-            if 5 <= x_player < len(pole[0]) - 5:
+            if 4 <= x_player < len(pole[0]) - 6:
                 flag_x = True
             else:
                 flag_x = False
@@ -166,6 +169,12 @@ def start_screen():
                 camera.apply(sprite)
         tiles_group.draw(screen)
         player_group.draw(screen)
+        if second:
+            smth.polet()
+            screen.blit(smth.screen, (0, 0))
+            second = False
+        else:
+            screen.blit(all_screens[1], (0, 0))
         pygame.display.flip()
         clock.tick(FPS)
 

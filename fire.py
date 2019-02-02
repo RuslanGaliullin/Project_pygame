@@ -9,9 +9,7 @@ second_all_sprites = pygame.sprite.Group()
 pushka_sprite = pygame.sprite.Group()
 ground_sprite = pygame.sprite.Group()
 mishen_sprite = pygame.sprite.Group()
-
-screen = pygame.display.set_mode((600, 500))
-screen2 = pygame.Surface(screen.get_size())
+screen = pygame.display.set_mode((500, 500))
 
 
 def load_image(name, colorkey=None):
@@ -47,7 +45,7 @@ class Ball(pygame.sprite.Sprite):
         self.vresalsy = False
 
     def update(self, mishen_sprite):
-        if not pygame.sprite.collide_mask(self, mishen):
+        if not pygame.sprite.collide_mask(self, On().mishen):
             self.pos_x += 3
             self.rect.x = self.pos_x + self.left
             self.rect.y = self.top - (int(self.pos_x * math.tan(math.radians(self.a)) - (9.8 * self.pos_x ** 2) / (
@@ -88,44 +86,52 @@ class Mishen(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
 
 
-player_image = load_image('pushka.png')
-running = True
-flying = False
-push = Pushka()
-clock = pygame.time.Clock()
-fon = pygame.transform.scale(load_image('fon_zap.jpg'), (600, 500))
-v = 50  # пикселей в секунду
-fps = 60
-mishen = Mishen()
-lifes = 3
-while running:
-    screen.blit(fon, (0, 0))
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT or lifes == 0:
-            running = False
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
-            push.update(-5)
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
-            push.update(5)
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and not flying:
+class On:
+    push = Pushka()
+    mishen = Mishen()
+    screen = screen
+
+    def __init__(self):
+        pass
+
+    def polet(self):
+        flying = False  # снаряд летит
+        running = True
+        clock = pygame.time.Clock()
+        fon = pygame.transform.scale(load_image('fon_zap.jpg'), (600, 500))
+        v = 50  # пикселей в секунду
+        fps = 60
+        lifes = 3
+        while running:
+            self.screen.blit(fon, (0, 0))
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT or lifes == 0:
+                    second_all_sprites.remove(ball)
+                    running = False
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
+                    self.push.update(-5)
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
+                    self.push.update(5)
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and not flying:
+                    if flying:
+                        second_all_sprites.remove(ball)
+                    ball = Ball(second_all_sprites, self.push.angle, v,
+                                self.push.rect.x + int(
+                                    math.cos(math.radians(self.push.angle)) * 100 + self.push.angle * 0.14),
+                                self.push.rect.y - int(
+                                    math.sin(math.radians(self.push.angle)) * 75) + self.push.angle * 0.84 + 10)
+                    flying = True
             if flying:
-                second_all_sprites.remove(ball)
-            ball = Ball(second_all_sprites, push.angle, v,
-                        push.rect.x + int(math.cos(math.radians(push.angle)) * 100 + push.angle * 0.14),
-                        push.rect.y - int(math.sin(math.radians(push.angle)) * 75) + push.angle * 0.84 + 10)
-            flying = True
-    if flying:
-        ball.update(mishen_sprite)
-        if ball.rect[0] >= 1000 or ball.rect[1] > (push.rect[1] + 75):
-            second_all_sprites.remove(ball)
-            flying = False
-            lifes -= 1
-        elif ball.vresalsy:
-            print(100)
-            clock.tick(2)
-            flying = False
-            second_all_sprites.remove(ball)
-    second_all_sprites.draw(screen)
-    pygame.display.flip()
-    d = v / fps
-    clock.tick(fps)
+                ball.update(mishen_sprite)
+                if ball.rect[0] >= 1000 or ball.rect[1] > (self.push.rect[1] + 75):
+                    second_all_sprites.remove(ball)
+                    flying = False
+                    lifes -= 1
+                elif ball.vresalsy:
+                    clock.tick(2)
+                    flying = False
+                    second_all_sprites.remove(ball)
+                    running = False
+            second_all_sprites.draw(self.screen)
+            pygame.display.flip()
+            clock.tick(fps)
