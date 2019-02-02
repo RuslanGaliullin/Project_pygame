@@ -4,6 +4,7 @@ import os
 import pygame
 
 from Camer import Camera
+from fire import smth
 
 FPS = 50
 pygame.init()
@@ -148,6 +149,8 @@ def start_screen():
                     pole[y_player - 1][x_player] = '@'
                     player.rect.y -= 50
                     y_player -= 1
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE and drawing:
+                pass
         if drawing:
             if 5 <= y_player < len(pole) - 5:
                 flag_y = True

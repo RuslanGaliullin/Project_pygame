@@ -89,13 +89,11 @@ class Mishen(pygame.sprite.Sprite):
 
 
 player_image = load_image('pushka.png')
-
 running = True
 flying = False
 push = Pushka()
 clock = pygame.time.Clock()
 fon = pygame.transform.scale(load_image('fon_zap.jpg'), (600, 500))
-
 v = 50  # пикселей в секунду
 fps = 60
 mishen = Mishen()
