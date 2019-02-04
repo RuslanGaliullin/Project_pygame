@@ -55,7 +55,6 @@ tile_images = {
     'wall': load_image('wall.jpg'),
     'empty': load_image('flor.jpg')
 }
-player_image = load_image('pushka.png')
 
 tile_width = tile_height = 50
 
@@ -69,11 +68,16 @@ class Tile(pygame.sprite.Sprite):
 
 
 class Player(pygame.sprite.Sprite):
+    image = load_image('pushka_player.png')
+
     def __init__(self, pos_x, pos_y):
         super().__init__(player_group, all_sprites)
-        self.image = player_image
+        self.image = Player.image
         self.rect = self.image.get_rect().move(
             tile_width * pos_x, tile_height * pos_y)
+
+    def rotate(self, angle):
+        self.image = pygame.transform.rotate(Player.image, angle)
 
 
 def generate_level(level):
@@ -111,8 +115,8 @@ def start_screen():
         screen.blit(string_rendered, intro_rect)
 
     drawing = False
-    second = False # активация второго холста
-    all_screens = {1:screen}
+    second = False  # активация второго холста
+    all_screens = {1: screen}
     while True:
         # all_sprites.draw(screen)
         for event in pygame.event.get():
@@ -128,38 +132,51 @@ def start_screen():
                 y_player = player.rect.y // 50
                 drawing = True
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT and drawing:
-                if pole[y_player][x_player - 1] != '#':
+                if pole[y_player][x_player-1] == 'p':
+                    smth = On()
+                    second = True
+                elif pole[y_player][x_player - 1] != '#':
                     pole[y_player][x_player] = '.'
                     pole[y_player][x_player - 1] = '@'
                     player.rect.x -= 50
                     x_player -= 1
+                    player.rotate(180)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT and drawing:
-                if pole[y_player][x_player + 1] != '#':
+                if pole[y_player][x_player+1] == 'p':
+                    smth = On()
+                    second = True
+                elif pole[y_player][x_player + 1] != '#':
                     pole[y_player][x_player] = '.'
                     pole[y_player][x_player + 1] = '@'
                     player.rect.x += 50
                     x_player += 1
+                    player.rotate(0)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN and drawing:
-                if pole[y_player + 1][x_player] != '#':
+                if pole[y_player + 1][x_player] == 'p':
+                    smth = On()
+                    second = True
+                elif pole[y_player + 1][x_player] != '#':
                     pole[y_player][x_player] = '.'
                     pole[y_player + 1][x_player] = '@'
                     player.rect.y += 50
                     y_player += 1
+                    player.rotate(-90)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_UP and drawing:
-                if pole[y_player - 1][x_player] != '#':
+                if pole[y_player - 1][x_player] == 'p':
+                    smth = On()
+                    second = True
+                elif pole[y_player - 1][x_player] != '#':
                     pole[y_player][x_player] = '.'
                     pole[y_player - 1][x_player] = '@'
                     player.rect.y -= 50
                     y_player -= 1
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE and not second and drawing:
-                smth = On()
-                second = True
+                    player.rotate(90)
         if drawing and not second:
             if 5 <= y_player < len(pole) - 6:
                 flag_y = True
             else:
                 flag_y = False
-            if 4 <= x_player < len(pole[0]) - 6:
+            if 4 <= x_player < len(pole[0]) - 5:
                 flag_x = True
             else:
                 flag_x = False

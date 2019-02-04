@@ -63,7 +63,7 @@ class Pushka(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__(pushka_sprite, second_all_sprites)
         self.image = Pushka.image
-        self.rect = pygame.Rect(100, 396, 50, 50)
+        self.rect = pygame.Rect(-50, 396, 50, 50)
         self.angle = 0
 
     def update(self, angle):
@@ -72,6 +72,10 @@ class Pushka(pygame.sprite.Sprite):
             self.image = pygame.transform.rotate(Pushka.image, self.angle)
             self.rect.x = 100 + (54 * math.sin(math.radians(self.angle))) - self.angle
             self.rect.y = 450 - (54 * math.cos(math.radians(self.angle))) - self.angle
+
+    def coming(self):
+        if self.rect.x != 100:
+            self.rect.x += 1
 
 
 class Mishen(pygame.sprite.Sprite):
@@ -102,17 +106,19 @@ class On:
         v = 50  # пикселей в секунду
         fps = 60
         lifes = 3
+        ball = None
         while running:
             self.screen.blit(fon, (0, 0))
             for event in pygame.event.get():
                 if event.type == pygame.QUIT or lifes == 0:
-                    second_all_sprites.remove(ball)
+                    if ball is not None:
+                        second_all_sprites.remove(ball)
                     running = False
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN and self.push.rect.x == 100:
                     self.push.update(-5)
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_UP and self.push.rect.x == 100:
                     self.push.update(5)
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and not flying:
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and not flying and self.push.rect.x == 100:
                     if flying:
                         second_all_sprites.remove(ball)
                     ball = Ball(second_all_sprites, self.push.angle, v,
@@ -132,6 +138,7 @@ class On:
                     flying = False
                     second_all_sprites.remove(ball)
                     running = False
+            self.push.coming()
             second_all_sprites.draw(self.screen)
             pygame.display.flip()
             clock.tick(fps)
