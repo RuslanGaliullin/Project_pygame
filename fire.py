@@ -94,6 +94,7 @@ class On:
     push = Pushka()
     mishen = Mishen()
     screen = screen
+    ball = None
 
     def __init__(self):
         pass
@@ -106,13 +107,12 @@ class On:
         v = 50  # пикселей в секунду
         fps = 60
         lifes = 3
-        ball = None
         while running:
             self.screen.blit(fon, (0, 0))
             for event in pygame.event.get():
                 if event.type == pygame.QUIT or lifes == 0:
-                    if ball is not None:
-                        second_all_sprites.remove(ball)
+                    if self.ball is not None:
+                        second_all_sprites.remove(self.ball)
                     running = False
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN and self.push.rect.x == 100:
                     self.push.update(-5)
@@ -120,23 +120,23 @@ class On:
                     self.push.update(5)
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and not flying and self.push.rect.x == 100:
                     if flying:
-                        second_all_sprites.remove(ball)
-                    ball = Ball(second_all_sprites, self.push.angle, v,
+                        second_all_sprites.remove(self.ball)
+                    self.ball = Ball(second_all_sprites, self.push.angle, v,
                                 self.push.rect.x + int(
                                     math.cos(math.radians(self.push.angle)) * 100 + self.push.angle * 0.14),
                                 self.push.rect.y - int(
                                     math.sin(math.radians(self.push.angle)) * 75) + self.push.angle * 0.84 + 10)
                     flying = True
             if flying:
-                ball.update(mishen_sprite)
-                if ball.rect[0] >= 1000 or ball.rect[1] > (self.push.rect[1] + 75):
-                    second_all_sprites.remove(ball)
+                self.ball.update(mishen_sprite)
+                if self.ball.rect[0] >= 1000 or self.ball.rect[1] > (self.push.rect[1] + 50):
+                    second_all_sprites.remove(self.ball)
                     flying = False
                     lifes -= 1
-                elif ball.vresalsy:
+                elif self.ball.vresalsy:
                     clock.tick(2)
                     flying = False
-                    second_all_sprites.remove(ball)
+                    second_all_sprites.remove(self.ball)
                     running = False
             self.push.coming()
             second_all_sprites.draw(self.screen)

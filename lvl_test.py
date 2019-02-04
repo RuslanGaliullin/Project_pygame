@@ -55,7 +55,7 @@ tile_images = {
     'wall': load_image('wall.jpg'),
     'empty': load_image('flor.jpg')
 }
-
+chellenges = {}
 tile_width = tile_height = 50
 
 
@@ -81,13 +81,15 @@ class Player(pygame.sprite.Sprite):
 
 
 def generate_level(level):
+    global chellenges
     new_player, x, y = None, None, None
     for y in range(len(level)):
         for x in range(len(level[y])):
             if level[y][x] == '.':
                 Tile('empty', x, y)
-            elif level[y][x] == '#':
-                Tile('wall', x, y)
+            elif level[y][x] == '#' or level[y][x] == 'p':
+                c = Tile('wall', x, y)
+                chellenges[(x, y)] = c
             elif level[y][x] == '@':
                 Tile('empty', x, y)
                 new_player = Player(x, y)
@@ -116,6 +118,7 @@ def start_screen():
 
     drawing = False
     second = False  # активация второго холста
+    complete = (0, 0)  # смешение игрока при прохождении задания
     all_screens = {1: screen}
     while True:
         # all_sprites.draw(screen)
@@ -132,9 +135,10 @@ def start_screen():
                 y_player = player.rect.y // 50
                 drawing = True
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT and drawing:
-                if pole[y_player][x_player-1] == 'p':
+                if pole[y_player][x_player - 1] == 'p':
                     smth = On()
                     second = True
+                    complete = (-1,  0)
                 elif pole[y_player][x_player - 1] != '#':
                     pole[y_player][x_player] = '.'
                     pole[y_player][x_player - 1] = '@'
@@ -142,9 +146,10 @@ def start_screen():
                     x_player -= 1
                     player.rotate(180)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT and drawing:
-                if pole[y_player][x_player+1] == 'p':
+                if pole[y_player][x_player + 1] == 'p':
                     smth = On()
                     second = True
+                    complete = (1, 0)
                 elif pole[y_player][x_player + 1] != '#':
                     pole[y_player][x_player] = '.'
                     pole[y_player][x_player + 1] = '@'
@@ -155,6 +160,7 @@ def start_screen():
                 if pole[y_player + 1][x_player] == 'p':
                     smth = On()
                     second = True
+                    complete = (0, 1)
                 elif pole[y_player + 1][x_player] != '#':
                     pole[y_player][x_player] = '.'
                     pole[y_player + 1][x_player] = '@'
@@ -165,6 +171,7 @@ def start_screen():
                 if pole[y_player - 1][x_player] == 'p':
                     smth = On()
                     second = True
+                    complete = (0, 1)
                 elif pole[y_player - 1][x_player] != '#':
                     pole[y_player][x_player] = '.'
                     pole[y_player - 1][x_player] = '@'
@@ -184,14 +191,22 @@ def start_screen():
             # обновляем положение всех спрайтов
             for sprite in all_sprites:
                 camera.apply(sprite)
-        tiles_group.draw(screen)
-        player_group.draw(screen)
+
         if second:
             smth.polet()
             screen.blit(smth.screen, (0, 0))
+            if smth.ball is not None and smth.ball.vresalsy:
+                player.rect.x += 50 * complete[0]
+                player.rect.y += 50 * complete[1]
+                pole[y_player + complete[1]][x_player + complete[0]] = '.'
+                pole[y_player + complete[1]][x_player + complete[0]] = '@'
+                x_player += complete[0]
+                y_player += complete[1]
             second = False
         else:
             screen.blit(all_screens[1], (0, 0))
+        tiles_group.draw(screen)
+        player_group.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)
 
