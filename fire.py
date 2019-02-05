@@ -114,6 +114,7 @@ class On:
                     if self.ball is not None:
                         second_all_sprites.remove(self.ball)
                     running = False
+                    self.push.rect.x = -50
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN and self.push.rect.x == 100:
                     self.push.update(-5)
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_UP and self.push.rect.x == 100:
