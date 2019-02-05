@@ -52,42 +52,53 @@ class Ball(pygame.sprite.Sprite):
                     2 * self.v ** 2 * math.cos(math.radians(self.a)) ** 2)))
         else:
             self.vresalsy = True
+            On.mishen.new_lvl(On.mishen.lvl_now +1)
 
     def get_event(self, event):
         pass
 
 
 class Pushka(pygame.sprite.Sprite):
-    image = load_image('pushka.png')
+    imagee = load_image('pushka.png')
 
     def __init__(self):
         super().__init__(pushka_sprite, second_all_sprites)
-        self.image = Pushka.image
+        self.image = Pushka.imagee
         self.rect = pygame.Rect(-50, 396, 50, 50)
         self.angle = 0
+        self.came = False
 
     def update(self, angle):
         if 70 >= self.angle + angle >= 0:
             self.angle += angle
-            self.image = pygame.transform.rotate(Pushka.image, self.angle)
+            self.image = pygame.transform.rotate(Pushka.imagee, self.angle)
             self.rect.x = 100 + (54 * math.sin(math.radians(self.angle))) - self.angle
             self.rect.y = 450 - (54 * math.cos(math.radians(self.angle))) - self.angle
 
     def coming(self):
-        if self.rect.x != 100:
+        if self.rect.x != 100 and not self.came:
             self.rect.x += 1
+        else:
+            self.came = True
 
 
 class Mishen(pygame.sprite.Sprite):
     image = load_image('mishen.png')
+    lvl = {1: (450, 350), 2: (450, 50)}
+    lvl_now = 1
 
     def __init__(self):
         super().__init__(mishen_sprite, second_all_sprites)
         self.image = Mishen.image
         self.rect = self.image.get_rect()
-        self.rect.x = 450
-        self.rect.y = 350
+        self.rect.x = Mishen.lvl[self.lvl_now][0]
+        self.rect.y = Mishen.lvl[self.lvl_now][1]
         self.mask = pygame.mask.from_surface(self.image)
+
+    def new_lvl(self, lvl_new):
+        self.rect.x = self.lvl[lvl_new][0]
+        self.rect.y = self.lvl[lvl_new][1]
+        self.lvl_now = lvl_new
 
 
 class On:
@@ -100,6 +111,8 @@ class On:
         pass
 
     def polet(self):
+        self.push.came = False
+        self.push.rect.x = -50
         flying = False  # снаряд летит
         running = True
         clock = pygame.time.Clock()
@@ -114,19 +127,19 @@ class On:
                     if self.ball is not None:
                         second_all_sprites.remove(self.ball)
                     running = False
-                    self.push.rect.x = -50
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN and self.push.rect.x == 100:
+
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN and self.push.came:
                     self.push.update(-5)
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_UP and self.push.rect.x == 100:
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_UP and self.push.came:
                     self.push.update(5)
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and not flying and self.push.rect.x == 100:
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and not flying and self.push.came:
                     if flying:
                         second_all_sprites.remove(self.ball)
                     self.ball = Ball(second_all_sprites, self.push.angle, v,
-                                self.push.rect.x + int(
-                                    math.cos(math.radians(self.push.angle)) * 100 + self.push.angle * 0.14),
-                                self.push.rect.y - int(
-                                    math.sin(math.radians(self.push.angle)) * 75) + self.push.angle * 0.84 + 10)
+                                     self.push.rect.x + int(
+                                         math.cos(math.radians(self.push.angle)) * 100 + self.push.angle * 0.14),
+                                     self.push.rect.y - int(
+                                         math.sin(math.radians(self.push.angle)) * 75) + self.push.angle * 0.84 + 10)
                     flying = True
             if flying:
                 self.ball.update(mishen_sprite)
