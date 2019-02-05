@@ -5,7 +5,7 @@ import math
 pygame.init()
 
 pygame.key.set_repeat(200, 70)
-second_all_sprites = pygame.sprite.Group()
+second_all_sprite = pygame.sprite.Group()
 pushka_sprite = pygame.sprite.Group()
 ground_sprite = pygame.sprite.Group()
 mishen_sprite = pygame.sprite.Group()
@@ -30,10 +30,10 @@ def load_image(name, colorkey=None):
 class Ball(pygame.sprite.Sprite):
     image = load_image("ball.png")
 
-    def __init__(self, group, a, v, x, y):
+    def __init__(self, a, v, x, y):
         # НЕОБХОДИМО вызвать конструктор родительского класса Sprite.
         # Это очень важно !!!
-        super().__init__(group)
+        super().__init__(second_all_sprite)
         self.image = Ball.image
         self.rect = self.image.get_rect()
         self.left = x
@@ -62,7 +62,7 @@ class Pushka(pygame.sprite.Sprite):
     imagee = load_image('pushka.png')
 
     def __init__(self):
-        super().__init__(pushka_sprite, second_all_sprites)
+        super().__init__(pushka_sprite, second_all_sprite)
         self.image = Pushka.imagee
         self.rect = pygame.Rect(-50, 396, 50, 50)
         self.angle = 0
@@ -77,7 +77,7 @@ class Pushka(pygame.sprite.Sprite):
 
     def coming(self):
         if self.rect.x != 100 and not self.came:
-            self.rect.x += 1
+            self.rect.x += 2
         else:
             self.came = True
 
@@ -88,7 +88,7 @@ class Mishen(pygame.sprite.Sprite):
     lvl_now = 1
 
     def __init__(self):
-        super().__init__(mishen_sprite, second_all_sprites)
+        super().__init__(mishen_sprite, second_all_sprite)
         self.image = Mishen.image
         self.rect = self.image.get_rect()
         self.rect.x = Mishen.lvl[self.lvl_now][0]
@@ -124,18 +124,14 @@ class On:
             self.screen.blit(fon, (0, 0))
             for event in pygame.event.get():
                 if event.type == pygame.QUIT or lifes == 0:
-                    if self.ball is not None:
-                        second_all_sprites.remove(self.ball)
                     running = False
 
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN and self.push.came:
                     self.push.update(-5)
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_UP and self.push.came:
                     self.push.update(5)
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and not flying and self.push.came:
-                    if flying:
-                        second_all_sprites.remove(self.ball)
-                    self.ball = Ball(second_all_sprites, self.push.angle, v,
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and not flying and self.push.came and lifes!=0:
+                    self.ball = Ball(self.push.angle, v,
                                      self.push.rect.x + int(
                                          math.cos(math.radians(self.push.angle)) * 100 + self.push.angle * 0.14),
                                      self.push.rect.y - int(
@@ -144,15 +140,15 @@ class On:
             if flying:
                 self.ball.update(mishen_sprite)
                 if self.ball.rect[0] >= 1000 or self.ball.rect[1] > (self.push.rect[1] + 50):
-                    second_all_sprites.remove(self.ball)
+                    second_all_sprite.remove(self.ball)
                     flying = False
                     lifes -= 1
                 elif self.ball.vresalsy:
                     clock.tick(2)
                     flying = False
-                    second_all_sprites.remove(self.ball)
+                    second_all_sprite.remove(self.ball)
                     running = False
             self.push.coming()
-            second_all_sprites.draw(self.screen)
+            second_all_sprite.draw(self.screen)
             pygame.display.flip()
             clock.tick(fps)

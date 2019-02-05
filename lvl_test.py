@@ -53,9 +53,10 @@ tiles_group = pygame.sprite.Group()
 player_group = pygame.sprite.Group()
 tile_images = {
     'wall': load_image('wall.jpg'),
-    'empty': load_image('flor.jpg')
+    'empty': load_image('flor.jpg'),
+    'comp': load_image('complete_chel.png')
 }
-chellenges = {}
+tiles = {}
 tile_width = tile_height = 50
 
 
@@ -65,6 +66,10 @@ class Tile(pygame.sprite.Sprite):
         self.image = tile_images[tile_type]
         self.rect = self.image.get_rect().move(
             tile_width * pos_x, tile_height * pos_y)
+        tiles[(pos_x, pos_y)] = self
+
+    def change(self, new):
+        self.image = new
 
 
 class Player(pygame.sprite.Sprite):
@@ -138,7 +143,7 @@ def start_screen():
                 if pole[y_player][x_player - 1] == 'p':
                     smth = On()
                     second = True
-                    complete = (-1,  0)
+                    complete = (-1, 0)
                 elif pole[y_player][x_player - 1] != '#':
                     pole[y_player][x_player] = '.'
                     pole[y_player][x_player - 1] = '@'
@@ -191,7 +196,8 @@ def start_screen():
             # обновляем положение всех спрайтов
             for sprite in all_sprites:
                 camera.apply(sprite)
-
+        tiles_group.draw(screen)
+        player_group.draw(screen)
         if second:
             smth.polet()
             screen.blit(smth.screen, (0, 0))
@@ -202,11 +208,8 @@ def start_screen():
                 pole[y_player + complete[1]][x_player + complete[0]] = '@'
                 x_player += complete[0]
                 y_player += complete[1]
+                tiles[(x_player, y_player)].change(load_image('flor.jpg'))
             second = False
-        else:
-            screen.blit(all_screens[1], (0, 0))
-        tiles_group.draw(screen)
-        player_group.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)
 
