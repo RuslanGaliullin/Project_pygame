@@ -53,8 +53,7 @@ tiles_group = pygame.sprite.Group()
 player_group = pygame.sprite.Group()
 tile_images = {
     'wall': load_image('wall.jpg'),
-    'empty': load_image('flor.jpg'),
-    'comp': load_image('complete_chel.png')
+    'empty': load_image('flor.jpg')
 }
 tiles = {}
 tile_width = tile_height = 50
@@ -86,15 +85,13 @@ class Player(pygame.sprite.Sprite):
 
 
 def generate_level(level):
-    global chellenges
     new_player, x, y = None, None, None
     for y in range(len(level)):
         for x in range(len(level[y])):
             if level[y][x] == '.':
                 Tile('empty', x, y)
             elif level[y][x] == '#' or level[y][x] == 'p':
-                c = Tile('wall', x, y)
-                chellenges[(x, y)] = c
+                Tile('wall', x, y)
             elif level[y][x] == '@':
                 Tile('empty', x, y)
                 new_player = Player(x, y)
@@ -184,7 +181,7 @@ def start_screen():
                     y_player -= 1
                     player.rotate(90)
         if drawing and not second:
-            if 5 <= y_player < len(pole) - 6:
+            if 4 <= y_player < len(pole) - 6:
                 flag_y = True
             else:
                 flag_y = False

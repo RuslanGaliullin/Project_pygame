@@ -84,7 +84,7 @@ class Pushka(pygame.sprite.Sprite):
 
 class Mishen(pygame.sprite.Sprite):
     image = load_image('mishen.png')
-    lvl = {1: (450, 350), 2: (450, 50)}
+    lvl = {1: (450, 350), 2: (250, 350)}
     lvl_now = 1
 
     def __init__(self):
