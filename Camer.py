@@ -12,11 +12,11 @@ class Camera:
     # позиционировать камеру на объекте target
     def update(self, target, flag_x, flag_y):
         if flag_x:
-            self.dx = -(target.rect.x + target.rect.w - 500 // 2)
+            self.dx = -(target.rect.x + target.rect.w - 400 // 2)
         else:
             self.dx = 0
         if flag_y:
-            self.dy = -(target.rect.y + target.rect.h - 500 // 2)
+            self.dy = -(target.rect.y + target.rect.h - 400 // 2)
         else:
             self.dy = 0
 

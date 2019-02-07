@@ -9,7 +9,8 @@ second_all_sprite = pygame.sprite.Group()
 pushka_sprite = pygame.sprite.Group()
 ground_sprite = pygame.sprite.Group()
 mishen_sprite = pygame.sprite.Group()
-screen = pygame.display.set_mode((500, 500))
+screen = pygame.display.set_mode((400, 400))
+width = height = 400
 
 
 def load_image(name, colorkey=None):
@@ -64,16 +65,17 @@ class Pushka(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__(pushka_sprite, second_all_sprite)
         self.image = Pushka.imagee
-        self.rect = pygame.Rect(-50, 396, 50, 50)
+        self.rect = pygame.Rect(-50, 296, 50, 50)
         self.angle = 0
+        self.defult = (100, self.rect.y + 54)
         self.came = False
 
     def update(self, angle):
         if 70 >= self.angle + angle >= 0:
             self.angle += angle
             self.image = pygame.transform.rotate(Pushka.imagee, self.angle)
-            self.rect.x = 100 + (54 * math.sin(math.radians(self.angle))) - self.angle
-            self.rect.y = 450 - (54 * math.cos(math.radians(self.angle))) - self.angle
+            self.rect.x = self.defult[0] + (54 * math.sin(math.radians(self.angle))) - self.angle
+            self.rect.y = self.defult[1] - (54 * math.cos(math.radians(self.angle))) - self.angle
 
     def coming(self):
         if self.rect.x != 100 and not self.came:
@@ -84,7 +86,7 @@ class Pushka(pygame.sprite.Sprite):
 
 class Mishen(pygame.sprite.Sprite):
     image = load_image('mishen.png')
-    lvl = {1: (450, 350), 2: (250, 350)}
+    lvl = {1: (width-50, height-150), 2: (250, 350)}
     lvl_now = 1
 
     def __init__(self):
@@ -116,7 +118,7 @@ class On:
         flying = False  # снаряд летит
         running = True
         clock = pygame.time.Clock()
-        fon = pygame.transform.scale(load_image('fon_zap.jpg'), (600, 500))
+        fon = pygame.transform.scale(load_image('fon_zap.jpg'), (400, 400))
         v = 50  # пикселей в секунду
         fps = 60
         lifes = 3

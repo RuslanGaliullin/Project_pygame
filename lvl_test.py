@@ -8,7 +8,7 @@ from fire import On
 
 FPS = 50
 pygame.init()
-screen = pygame.display.set_mode((500, 500))
+screen = pygame.display.set_mode((400, 400))
 clock = pygame.time.Clock()
 pygame.key.set_repeat(200, 70)
 
@@ -56,7 +56,7 @@ tile_images = {
     'empty': load_image('flor.jpg')
 }
 tiles = {}
-tile_width = tile_height = 50
+tile_width = tile_height = 30
 
 
 class Tile(pygame.sprite.Sprite):
@@ -79,6 +79,8 @@ class Player(pygame.sprite.Sprite):
         self.image = Player.image
         self.rect = self.image.get_rect().move(
             tile_width * pos_x, tile_height * pos_y)
+        self.rect.width = tile_width
+        self.rect.height = tile_width
 
     def rotate(self, angle):
         self.image = pygame.transform.rotate(Player.image, angle)
@@ -100,7 +102,7 @@ def generate_level(level):
 
 
 def start_screen():
-    WIDTH, HEIGHT = 500, 500
+    WIDTH, HEIGHT = 400, 400
     intro_text = ["МИНИ ИГРА ПУШКА", "",
                   "Никаких правил",
                   "Я старался"]
@@ -133,8 +135,8 @@ def start_screen():
                 for i in range(len(pole)):
                     pole[i] = list(pole[i])
                 player = a[0]
-                x_player = player.rect.x // 50
-                y_player = player.rect.y // 50
+                x_player = player.rect.x // tile_width
+                y_player = player.rect.y // tile_width
                 drawing = True
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT and drawing:
                 if pole[y_player][x_player - 1] == 'p':
@@ -144,7 +146,7 @@ def start_screen():
                 elif pole[y_player][x_player - 1] != '#':
                     pole[y_player][x_player] = '.'
                     pole[y_player][x_player - 1] = '@'
-                    player.rect.x -= 50
+                    player.rect.x -= tile_width
                     x_player -= 1
                     player.rotate(180)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT and drawing:
@@ -155,7 +157,7 @@ def start_screen():
                 elif pole[y_player][x_player + 1] != '#':
                     pole[y_player][x_player] = '.'
                     pole[y_player][x_player + 1] = '@'
-                    player.rect.x += 50
+                    player.rect.x += tile_width
                     x_player += 1
                     player.rotate(0)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN and drawing:
@@ -166,7 +168,7 @@ def start_screen():
                 elif pole[y_player + 1][x_player] != '#':
                     pole[y_player][x_player] = '.'
                     pole[y_player + 1][x_player] = '@'
-                    player.rect.y += 50
+                    player.rect.y += tile_width
                     y_player += 1
                     player.rotate(-90)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_UP and drawing:
@@ -177,15 +179,15 @@ def start_screen():
                 elif pole[y_player - 1][x_player] != '#':
                     pole[y_player][x_player] = '.'
                     pole[y_player - 1][x_player] = '@'
-                    player.rect.y -= 50
+                    player.rect.y -= tile_width
                     y_player -= 1
                     player.rotate(90)
         if drawing and not second:
-            if 4 <= y_player < len(pole) - 6:
+            if 5 < y_player < (len(pole) - 7):
                 flag_y = True
             else:
                 flag_y = False
-            if 4 <= x_player < len(pole[0]) - 5:
+            if 5 < x_player < (len(pole[0]) - 7):
                 flag_x = True
             else:
                 flag_x = False
@@ -199,14 +201,16 @@ def start_screen():
             smth.polet()
             screen.blit(smth.screen, (0, 0))
             if smth.ball is not None and smth.ball.vresalsy:
-                player.rect.x += 50 * complete[0]
-                player.rect.y += 50 * complete[1]
+                player.rect.x += tile_width * complete[0]
+                player.rect.y += tile_width * complete[1]
                 pole[y_player + complete[1]][x_player + complete[0]] = '.'
                 pole[y_player + complete[1]][x_player + complete[0]] = '@'
                 x_player += complete[0]
                 y_player += complete[1]
                 tiles[(x_player, y_player)].change(load_image('flor.jpg'))
             second = False
+        else:
+            screen.blit(all_screens[1],(0, 0))
         pygame.display.flip()
         clock.tick(FPS)
 
