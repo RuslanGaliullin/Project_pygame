@@ -1,6 +1,9 @@
 import pygame
 import os
 
+pygame.init()
+screen = pygame.display.set_mode((400, 400))
+all_sprites = pygame.sprite.Group()
 
 def load_image(name, colorkey=None):
     fullname = os.path.join('data', name)
@@ -33,3 +36,5 @@ class Coin(pygame.sprite.Sprite):
 
     def get_event(self, event):
         pass
+
+c = Coin(all_sprites)
