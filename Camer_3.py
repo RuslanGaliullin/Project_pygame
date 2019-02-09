@@ -19,4 +19,3 @@ class Camera:
             self.dy = -(target.rect.y + target.rect.h - 400 // 2)
         else:
             self.dy = 0
-

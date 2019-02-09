@@ -3,12 +3,12 @@ import os
 
 import pygame
 
-from Camer import Camera
+from Camer_3 import Camera
 from fire import On
 
 FPS = 50
 pygame.init()
-screen = pygame.display.set_mode((400, 400))
+screen = pygame.display.set_mode((600, 600))
 clock = pygame.time.Clock()
 pygame.key.set_repeat(200, 70)
 
@@ -72,7 +72,7 @@ class Tile(pygame.sprite.Sprite):
 
 
 class Player(pygame.sprite.Sprite):
-    image = load_image('pushka_player.png')
+    image = load_image('pushka_player_1.png')
 
     def __init__(self, pos_x, pos_y):
         super().__init__(player_group, all_sprites)
@@ -100,8 +100,9 @@ def generate_level(level):
     # вернем игрока, а также размер поля в клетках
     return new_player, x, y
 
-
+running = True
 def start_screen():
+    camera = Camera()
     WIDTH, HEIGHT = 400, 400
     intro_text = ["МИНИ ИГРА ПУШКА", "",
                   "Никаких правил",
@@ -124,13 +125,13 @@ def start_screen():
     second = False  # активация второго холста
     complete = (0, 0)  # смешение игрока при прохождении задания
     all_screens = {1: screen}
-    while True:
+    while running:
         # all_sprites.draw(screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
             if event.type == pygame.MOUSEBUTTONDOWN and not drawing:
-                pole = load_level('level.txt')
+                pole = load_level('level_1.txt')
                 a = generate_level(pole)
                 for i in range(len(pole)):
                     pole[i] = list(pole[i])
@@ -213,7 +214,3 @@ def start_screen():
             screen.blit(all_screens[1],(0, 0))
         pygame.display.flip()
         clock.tick(FPS)
-
-
-camera = Camera()
-start_screen()
