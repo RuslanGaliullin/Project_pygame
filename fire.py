@@ -53,7 +53,7 @@ class Ball(pygame.sprite.Sprite):
                     2 * self.v ** 2 * math.cos(math.radians(self.a)) ** 2)))
         else:
             self.vresalsy = True
-            On.mishen.new_lvl(On.mishen.lvl_now +1)
+            On.mishen.new_lvl(On.mishen.lvl_now + 1)
 
     def get_event(self, event):
         pass
@@ -86,7 +86,7 @@ class Pushka(pygame.sprite.Sprite):
 
 class Mishen(pygame.sprite.Sprite):
     image = load_image('mishen.png')
-    lvl = {1: (width-50, height-150), 2: (250, 350)}
+    lvl = {1: (width-50, height-150), 2: (width-250, height-150),3: (width-250, height-150), 4: (width-250, height-150)}
     lvl_now = 1
 
     def __init__(self):

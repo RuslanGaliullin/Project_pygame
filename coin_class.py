@@ -23,7 +23,7 @@ def load_image(name, colorkey=None):
 class Coin(pygame.sprite.Sprite):
     image = load_image("coin.png")
 
-    def __init__(self, group):
+    def __init__(self, group, x, y):
         # НЕОБХОДИМО вызвать конструктор родительского класса Sprite.
         # Это очень важно !!!
         super().__init__(group)
@@ -36,5 +36,3 @@ class Coin(pygame.sprite.Sprite):
 
     def get_event(self, event):
         pass
-
-c = Coin(all_sprites)
