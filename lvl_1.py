@@ -135,10 +135,14 @@ def start_screen():
     complete = (0, 0)  # смешение игрока при прохождении задания
     all_screens = {1: screen}
     coins = 0
+    complete_lvl = True
     while running:
         # all_sprites.draw(screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                if complete_lvl:
+                    from lvl_2 import start_screen as second_lvl
+                    second_lvl()
                 terminate()
             if event.type == pygame.MOUSEBUTTONDOWN and not drawing:
                 pole = load_level('level_1.txt')
@@ -154,6 +158,7 @@ def start_screen():
                     smth = On()
                     second = True
                     complete = (-1, 0)
+                    player.rotate(180)
                 elif x_player - 1 >= 0 and pole[y_player][x_player-1] == 'c':
                     coins += 1
                     pole[y_player][x_player] = '.'
@@ -161,6 +166,7 @@ def start_screen():
                     player.rect.x -= tile_width
                     x_player -= 1
                     tiles_group.remove(tiles[(x_player, y_player)])
+                    player.rotate(180)
                 elif x_player - 1 >= 0  and pole[y_player][x_player - 1] != '#':
                     pole[y_player][x_player] = '.'
                     pole[y_player][x_player - 1] = '@'
@@ -172,6 +178,7 @@ def start_screen():
                     smth = On()
                     second = True
                     complete = (1, 0)
+                    player.rotate(0)
                 elif x_player + 1 < len(pole[0]) and  pole[y_player][x_player+1] == 'c':
                     coins += 1
                     pole[y_player][x_player] = '.'
@@ -179,6 +186,7 @@ def start_screen():
                     player.rect.x += tile_width
                     x_player += 1
                     tiles_group.remove(tiles[(x_player, y_player)])
+                    player.rotate(0)
                 elif x_player + 1 < len(pole[0]) and pole[y_player][x_player + 1] != '#':
                     pole[y_player][x_player] = '.'
                     pole[y_player][x_player + 1] = '@'
@@ -190,6 +198,7 @@ def start_screen():
                     smth = On()
                     second = True
                     complete = (0, 1)
+                    player.rotate(-90)
                 elif y_player + 1 < len(pole) and pole[y_player+1][x_player] == 'c':
                     coins += 1
                     pole[y_player][x_player] = '.'
@@ -197,6 +206,7 @@ def start_screen():
                     player.rect.y += tile_width
                     y_player += 1
                     tiles_group.remove(tiles[(x_player, y_player)])
+                    player.rotate(-90)
                 elif y_player + 1 < len(pole) and pole[y_player + 1][x_player] != '#':
                     pole[y_player][x_player] = '.'
                     pole[y_player + 1][x_player] = '@'
@@ -208,6 +218,7 @@ def start_screen():
                     smth = On()
                     second = True
                     complete = (0, -1)
+                    player.rotate(90)
                 elif y_player - 1 >= 0 and pole[y_player - 1][x_player] == 'c':
                     coins += 1
                     pole[y_player][x_player] = '.'
@@ -215,6 +226,7 @@ def start_screen():
                     player.rect.y -= tile_width
                     y_player -= 1
                     tiles_group.remove(tiles[(x_player, y_player)])
+                    player.rotate(90)
                 elif y_player - 1 >= 0 and pole[y_player - 1][x_player] != '#':
                     pole[y_player][x_player] = '.'
                     pole[y_player - 1][x_player] = '@'
@@ -239,3 +251,4 @@ def start_screen():
             screen.blit(all_screens[1], (0, 0))
         pygame.display.flip()
         clock.tick(FPS)
+start_screen()
