@@ -5,7 +5,6 @@ import pygame
 
 from fire import On
 
-
 FPS = 50
 pygame.init()
 screen = pygame.display.set_mode((400, 400))
@@ -54,8 +53,8 @@ player_group = pygame.sprite.Group()
 tile_images = {
     'wall': load_image('wall.jpg'),
     'empty': load_image('flor.jpg'),
-    'chel':load_image('chel.jpg'),
-    'coin':load_image('coin.png')
+    'chel': load_image('chel.jpg'),
+    'coin': load_image('coin.png')
 }
 tiles = {}
 tile_width = tile_height = 40
@@ -159,7 +158,7 @@ def start_screen():
                     second = True
                     complete = (-1, 0)
                     player.rotate(180)
-                elif x_player - 1 >= 0 and pole[y_player][x_player-1] == 'c':
+                elif x_player - 1 >= 0 and pole[y_player][x_player - 1] == 'c':
                     coins += 1
                     pole[y_player][x_player] = '.'
                     pole[y_player][x_player - 1] = '@'
@@ -167,7 +166,7 @@ def start_screen():
                     x_player -= 1
                     tiles_group.remove(tiles[(x_player, y_player)])
                     player.rotate(180)
-                elif x_player - 1 >= 0  and pole[y_player][x_player - 1] != '#':
+                elif x_player - 1 >= 0 and pole[y_player][x_player - 1] != '#':
                     pole[y_player][x_player] = '.'
                     pole[y_player][x_player - 1] = '@'
                     player.rect.x -= tile_width
@@ -179,7 +178,7 @@ def start_screen():
                     second = True
                     complete = (1, 0)
                     player.rotate(0)
-                elif x_player + 1 < len(pole[0]) and  pole[y_player][x_player+1] == 'c':
+                elif x_player + 1 < len(pole[0]) and pole[y_player][x_player + 1] == 'c':
                     coins += 1
                     pole[y_player][x_player] = '.'
                     pole[y_player][x_player + 1] = '@'
@@ -199,7 +198,7 @@ def start_screen():
                     second = True
                     complete = (0, 1)
                     player.rotate(-90)
-                elif y_player + 1 < len(pole) and pole[y_player+1][x_player] == 'c':
+                elif y_player + 1 < len(pole) and pole[y_player + 1][x_player] == 'c':
                     coins += 1
                     pole[y_player][x_player] = '.'
                     pole[y_player + 1][x_player] = '@'
@@ -251,4 +250,6 @@ def start_screen():
             screen.blit(all_screens[1], (0, 0))
         pygame.display.flip()
         clock.tick(FPS)
+
+
 start_screen()
