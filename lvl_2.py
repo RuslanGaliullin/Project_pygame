@@ -55,7 +55,8 @@ tile_images = {
     'wall': load_image('wall.jpg'),
     'empty': load_image('flor.jpg'),
     'chel':load_image('chel_2.jpg'),
-    'coin': load_image('coin_2.png')
+    'coin': load_image('coin_2.png'),
+    'finish': load_image('finish_2.png')
 }
 tiles = {}
 tile_width = tile_height = 30
@@ -99,6 +100,8 @@ def generate_level(level):
             elif level[y][x] == '@':
                 Tile('empty', x, y)
                 new_player = Player(x, y)
+            elif level[y][x] == 'f':
+                Tile('finish', x, y)
             if level[y][x] == 'p':
                 Tile('chel', x, y)
             if level[y][x] == 'c':
@@ -129,19 +132,15 @@ def start_screen():
     coins = 0
     drawing = False
     second = False  # активация второго холста
-    complete_chel = (0, 0)  # смешение игрока при прохождении задания
+    complete = (0, 0)  # смешение игрока при прохождении задания
     all_screens = {1: screen}
-    complete_lvl = True
     while True:
         # all_sprites.draw(screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                if complete_lvl:
-                    from lvl_3 import start_screen as third_lvl
-                    third_lvl()
                 terminate()
             if event.type == pygame.MOUSEBUTTONDOWN and not drawing:
-                pole = load_level('level_2.txt')
+                pole = load_level('level_1.txt')
                 a = generate_level(pole)
                 for i in range(len(pole)):
                     pole[i] = list(pole[i])
@@ -153,7 +152,7 @@ def start_screen():
                 if x_player - 1 >= 0 and pole[y_player][x_player - 1] == 'p':
                     smth = On()
                     second = True
-                    complete_chel = (-1, 0)
+                    complete = (-1, 0)
                     player.rotate(180)
                 elif x_player - 1 >= 0 and pole[y_player][x_player - 1] == 'c':
                     coins += 1
@@ -161,11 +160,16 @@ def start_screen():
                     pole[y_player][x_player - 1] = '@'
                     player.rect.x -= tile_width
                     x_player -= 1
-                    player.rotate(180)
                     tiles_group.remove(tiles[(x_player, y_player)])
+                    player.rotate(180)
+                elif x_player - 1 >= 0 and pole[y_player][x_player - 1] == 'f' and coins == 3:
+                    from lvl_2 import start_screen as second_lvl
+                    second_lvl()
                 elif x_player - 1 >= 0 and pole[y_player][x_player - 1] != '#':
-                    pole[y_player][x_player] = '.'
-                    pole[y_player][x_player - 1] = '@'
+                    if pole[y_player][x_player] != 'f':
+                        pole[y_player][x_player] = '.'
+                    if pole[y_player][x_player - 1] != 'f':
+                        pole[y_player][x_player - 1] = '@'
                     player.rect.x -= tile_width
                     x_player -= 1
                     player.rotate(180)
@@ -173,8 +177,11 @@ def start_screen():
                 if x_player + 1 < len(pole[0]) and pole[y_player][x_player + 1] == 'p':
                     smth = On()
                     second = True
-                    complete_chel = (1, 0)
+                    complete = (1, 0)
                     player.rotate(0)
+                elif x_player + 1 < len(pole[0]) and pole[y_player][x_player + 1] == 'f' and coins == 3:
+                    from lvl_2 import start_screen as second_lvl
+                    second_lvl()
                 elif x_player + 1 < len(pole[0]) and pole[y_player][x_player + 1] == 'c':
                     coins += 1
                     pole[y_player][x_player] = '.'
@@ -184,8 +191,10 @@ def start_screen():
                     tiles_group.remove(tiles[(x_player, y_player)])
                     player.rotate(0)
                 elif x_player + 1 < len(pole[0]) and pole[y_player][x_player + 1] != '#':
-                    pole[y_player][x_player] = '.'
-                    pole[y_player][x_player + 1] = '@'
+                    if pole[y_player][x_player] != 'f':
+                        pole[y_player][x_player] = '.'
+                    if pole[y_player][x_player + 1] != 'f':
+                        pole[y_player][x_player + 1] = '@'
                     player.rect.x += tile_width
                     x_player += 1
                     player.rotate(0)
@@ -193,8 +202,11 @@ def start_screen():
                 if y_player + 1 < len(pole) and pole[y_player + 1][x_player] == 'p':
                     smth = On()
                     second = True
-                    complete_chel = (0, 1)
+                    complete = (0, 1)
                     player.rotate(-90)
+                elif y_player + 1 < len(pole) and pole[y_player + 1][x_player] == 'f' and coins == 3:
+                    from lvl_2 import start_screen as second_lvl
+                    second_lvl()
                 elif y_player + 1 < len(pole) and pole[y_player + 1][x_player] == 'c':
                     coins += 1
                     pole[y_player][x_player] = '.'
@@ -204,17 +216,22 @@ def start_screen():
                     tiles_group.remove(tiles[(x_player, y_player)])
                     player.rotate(-90)
                 elif y_player + 1 < len(pole) and pole[y_player + 1][x_player] != '#':
-                    pole[y_player][x_player] = '.'
-                    pole[y_player + 1][x_player] = '@'
+                    if pole[y_player][x_player] != 'f':
+                        pole[y_player][x_player] = '.'
+                    if pole[y_player + 1][x_player] != 'f':
+                        pole[y_player + 1][x_player] = '@'
                     player.rect.y += tile_width
                     y_player += 1
                     player.rotate(-90)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_UP and drawing:
-                if y_player - 1 >= 0 and x_player < len(pole[0]) and pole[y_player - 1][x_player] == 'p':
+                if y_player - 1 >= 0 and pole[y_player - 1][x_player] == 'p':
                     smth = On()
                     second = True
-                    complete_chel = (0, -1)
+                    complete = (0, -1)
                     player.rotate(90)
+                elif y_player - 1 >= 0 and pole[y_player - 1][x_player] == 'f' and coins == 3:
+                    from lvl_2 import start_screen as second_lvl
+                    second_lvl()
                 elif y_player - 1 >= 0 and pole[y_player - 1][x_player] == 'c':
                     coins += 1
                     pole[y_player][x_player] = '.'
@@ -224,8 +241,10 @@ def start_screen():
                     tiles_group.remove(tiles[(x_player, y_player)])
                     player.rotate(90)
                 elif y_player - 1 >= 0 and pole[y_player - 1][x_player] != '#':
-                    pole[y_player][x_player] = '.'
-                    pole[y_player - 1][x_player] = '@'
+                    if pole[y_player][x_player] != 'f':
+                        pole[y_player][x_player] = '.'
+                    if pole[y_player - 1][x_player] != 'f':
+                        pole[y_player - 1][x_player] = '@'
                     player.rect.y -= tile_width
                     y_player -= 1
                     player.rotate(90)
@@ -235,12 +254,12 @@ def start_screen():
             smth.polet()
             screen.blit(smth.screen, (0, 0))
             if smth.ball is not None and smth.ball.vresalsy:
-                player.rect.x += tile_width * complete_chel[0]
-                player.rect.y += tile_width * complete_chel[1]
-                pole[y_player + complete_chel[1]][x_player + complete_chel[0]] = '.'
-                pole[y_player + complete_chel[1]][x_player + complete_chel[0]] = '@'
-                x_player += complete_chel[0]
-                y_player += complete_chel[1]
+                player.rect.x += tile_width * complete[0]
+                player.rect.y += tile_width * complete[1]
+                pole[y_player + complete[1]][x_player + complete[0]] = '.'
+                pole[y_player + complete[1]][x_player + complete[0]] = '@'
+                x_player += complete[0]
+                y_player += complete[1]
                 tiles[(x_player, y_player)].change(load_image('flor.jpg'))
             second = False
         else:

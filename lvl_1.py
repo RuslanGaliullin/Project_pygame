@@ -54,7 +54,8 @@ tile_images = {
     'wall': load_image('wall.jpg'),
     'empty': load_image('flor.jpg'),
     'chel': load_image('chel.jpg'),
-    'coin': load_image('coin.png')
+    'coin': load_image('coin.png'),
+    'finish': load_image('finish_1.png')
 }
 tiles = {}
 tile_width = tile_height = 40
@@ -98,6 +99,8 @@ def generate_level(level):
             elif level[y][x] == '@':
                 Tile('empty', x, y)
                 new_player = Player(x, y)
+            elif level[y][x] == 'f':
+                Tile('finish', x, y)
             if level[y][x] == 'p':
                 Tile('chel', x, y)
             if level[y][x] == 'c':
@@ -134,14 +137,10 @@ def start_screen():
     complete = (0, 0)  # смешение игрока при прохождении задания
     all_screens = {1: screen}
     coins = 0
-    complete_lvl = True
     while running:
         # all_sprites.draw(screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                if complete_lvl:
-                    from lvl_2 import start_screen as second_lvl
-                    second_lvl()
                 terminate()
             if event.type == pygame.MOUSEBUTTONDOWN and not drawing:
                 pole = load_level('level_1.txt')
@@ -166,9 +165,14 @@ def start_screen():
                     x_player -= 1
                     tiles_group.remove(tiles[(x_player, y_player)])
                     player.rotate(180)
+                elif x_player - 1 >= 0 and pole[y_player][x_player - 1] == 'f' and coins == 3:
+                    from lvl_2 import start_screen as second_lvl
+                    second_lvl()
                 elif x_player - 1 >= 0 and pole[y_player][x_player - 1] != '#':
-                    pole[y_player][x_player] = '.'
-                    pole[y_player][x_player - 1] = '@'
+                    if pole[y_player][x_player] != 'f':
+                        pole[y_player][x_player] = '.'
+                    if pole[y_player][x_player - 1] != 'f':
+                        pole[y_player][x_player - 1] = '@'
                     player.rect.x -= tile_width
                     x_player -= 1
                     player.rotate(180)
@@ -178,6 +182,9 @@ def start_screen():
                     second = True
                     complete = (1, 0)
                     player.rotate(0)
+                elif x_player + 1 < len(pole[0]) and pole[y_player][x_player + 1] == 'f' and coins == 3:
+                    from lvl_2 import start_screen as second_lvl
+                    second_lvl()
                 elif x_player + 1 < len(pole[0]) and pole[y_player][x_player + 1] == 'c':
                     coins += 1
                     pole[y_player][x_player] = '.'
@@ -187,8 +194,10 @@ def start_screen():
                     tiles_group.remove(tiles[(x_player, y_player)])
                     player.rotate(0)
                 elif x_player + 1 < len(pole[0]) and pole[y_player][x_player + 1] != '#':
-                    pole[y_player][x_player] = '.'
-                    pole[y_player][x_player + 1] = '@'
+                    if pole[y_player][x_player] != 'f':
+                        pole[y_player][x_player] = '.'
+                    if pole[y_player][x_player + 1] != 'f':
+                        pole[y_player][x_player + 1] = '@'
                     player.rect.x += tile_width
                     x_player += 1
                     player.rotate(0)
@@ -198,6 +207,9 @@ def start_screen():
                     second = True
                     complete = (0, 1)
                     player.rotate(-90)
+                elif y_player + 1 < len(pole) and pole[y_player + 1][x_player] == 'f' and coins == 3:
+                    from lvl_2 import start_screen as second_lvl
+                    second_lvl()
                 elif y_player + 1 < len(pole) and pole[y_player + 1][x_player] == 'c':
                     coins += 1
                     pole[y_player][x_player] = '.'
@@ -207,17 +219,22 @@ def start_screen():
                     tiles_group.remove(tiles[(x_player, y_player)])
                     player.rotate(-90)
                 elif y_player + 1 < len(pole) and pole[y_player + 1][x_player] != '#':
-                    pole[y_player][x_player] = '.'
-                    pole[y_player + 1][x_player] = '@'
+                    if pole[y_player][x_player] != 'f':
+                        pole[y_player][x_player] = '.'
+                    if pole[y_player + 1][x_player] != 'f':
+                        pole[y_player + 1][x_player] = '@'
                     player.rect.y += tile_width
                     y_player += 1
                     player.rotate(-90)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_UP and drawing:
-                if y_player - 1 >= 0 and x_player < len(pole[0]) and pole[y_player - 1][x_player] == 'p':
+                if y_player - 1 >= 0 and pole[y_player - 1][x_player] == 'p':
                     smth = On()
                     second = True
                     complete = (0, -1)
                     player.rotate(90)
+                elif y_player - 1 >= 0 and pole[y_player - 1][x_player] == 'f' and coins == 3:
+                    from lvl_2 import start_screen as second_lvl
+                    second_lvl()
                 elif y_player - 1 >= 0 and pole[y_player - 1][x_player] == 'c':
                     coins += 1
                     pole[y_player][x_player] = '.'
@@ -227,13 +244,16 @@ def start_screen():
                     tiles_group.remove(tiles[(x_player, y_player)])
                     player.rotate(90)
                 elif y_player - 1 >= 0 and pole[y_player - 1][x_player] != '#':
-                    pole[y_player][x_player] = '.'
-                    pole[y_player - 1][x_player] = '@'
+                    if pole[y_player][x_player] != 'f':
+                        pole[y_player][x_player] = '.'
+                    if pole[y_player - 1][x_player] != 'f':
+                        pole[y_player - 1][x_player] = '@'
                     player.rect.y -= tile_width
                     y_player -= 1
                     player.rotate(90)
         tiles_group.draw(screen)
         player_group.draw(screen)
+
         if second:
             smth.polet()
             screen.blit(smth.screen, (0, 0))
