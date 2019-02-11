@@ -54,7 +54,7 @@ player_group = pygame.sprite.Group()
 tile_images = {
     'wall': load_image('wall.jpg'),
     'empty': load_image('flor.jpg'),
-    'chel':load_image('chel_2.jpg'),
+    'chel':load_image('chel_2.png'),
     'coin': load_image('coin_2.png'),
     'finish': load_image('finish_2.png')
 }
@@ -140,7 +140,7 @@ def start_screen():
             if event.type == pygame.QUIT:
                 terminate()
             if event.type == pygame.MOUSEBUTTONDOWN and not drawing:
-                pole = load_level('level_1.txt')
+                pole = load_level('level_2.txt')
                 a = generate_level(pole)
                 for i in range(len(pole)):
                     pole[i] = list(pole[i])
