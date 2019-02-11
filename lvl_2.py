@@ -5,7 +5,6 @@ import pygame
 
 from fire_2 import On
 
-
 FPS = 50
 pygame.init()
 screen = pygame.display.set_mode((600, 600))
@@ -54,7 +53,7 @@ player_group = pygame.sprite.Group()
 tile_images = {
     'wall': load_image('wall.jpg'),
     'empty': load_image('flor.jpg'),
-    'chel':load_image('chel_2.png'),
+    'chel': load_image('chel_2.png'),
     'coin': load_image('coin_2.png'),
     'finish': load_image('finish_2.png')
 }
