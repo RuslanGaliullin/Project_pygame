@@ -53,7 +53,7 @@ player_group = pygame.sprite.Group()
 tile_images = {
     'wall': load_image('wall.jpg'),
     'empty': load_image('flor.jpg'),
-    'chel': load_image('chel.jpg'),
+    'chel': load_image('chel.png'),
     'coin': load_image('coin.png'),
     'finish': load_image('finish_1.png')
 }
