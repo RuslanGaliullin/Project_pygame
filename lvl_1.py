@@ -3,7 +3,7 @@ import os
 
 import pygame
 
-from fire import On
+from fire_1 import On
 
 FPS = 50
 pygame.init()

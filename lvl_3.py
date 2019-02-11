@@ -4,7 +4,7 @@ import os
 import pygame
 
 from Camer_3 import Camera
-from fire import On
+from fire_1 import On
 
 FPS = 50
 pygame.init()

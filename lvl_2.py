@@ -3,7 +3,7 @@ import os
 
 import pygame
 
-from fire import On
+from fire_2 import On
 
 
 FPS = 50
@@ -54,8 +54,8 @@ player_group = pygame.sprite.Group()
 tile_images = {
     'wall': load_image('wall.jpg'),
     'empty': load_image('flor.jpg'),
-    'chel':load_image('chel.png'),
-    'coin': load_image('coin.png')
+    'chel':load_image('chel_2.jpg'),
+    'coin': load_image('coin_2.png')
 }
 tiles = {}
 tile_width = tile_height = 30
@@ -92,19 +92,23 @@ def generate_level(level):
     new_player, x, y = None, None, None
     for y in range(len(level)):
         for x in range(len(level[y])):
-            if level[y][x] == '.':
+            if level[y][x] == '.' or level[y][x] == 'c' or level[y][x] == 'p':
                 Tile('empty', x, y)
-            elif level[y][x] == '#' or level[y][x] == 'p':
+            elif level[y][x] == '#':
                 Tile('wall', x, y)
             elif level[y][x] == '@':
                 Tile('empty', x, y)
                 new_player = Player(x, y)
+            if level[y][x] == 'p':
+                Tile('chel', x, y)
+            if level[y][x] == 'c':
+                Tile('coin', x, y)
     # вернем игрока, а также размер поля в клетках
     return new_player, x, y
 
 
 def start_screen():
-    WIDTH, HEIGHT = 400, 400
+    WIDTH, HEIGHT = 600, 600
     intro_text = ["МИНИ ИГРА ПУШКА", "",
                   "Никаких правил",
                   "Я старался"]
@@ -137,7 +141,7 @@ def start_screen():
                     third_lvl()
                 terminate()
             if event.type == pygame.MOUSEBUTTONDOWN and not drawing:
-                pole = load_level('level_1.txt')
+                pole = load_level('level_2.txt')
                 a = generate_level(pole)
                 for i in range(len(pole)):
                     pole[i] = list(pole[i])
