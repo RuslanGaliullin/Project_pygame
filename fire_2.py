@@ -1,6 +1,7 @@
 import pygame
 import os
 import math
+from random import randint
 
 pygame.init()
 
@@ -86,7 +87,9 @@ class Pushka(pygame.sprite.Sprite):
 
 class Mishen(pygame.sprite.Sprite):
     image = load_image('mishen.png')
-    lvl = {1: (width-50, height-150), 2: (width-250, height-150),3: (width-250, height-150), 4: (width-250, height-150)}
+    lvl = {1: (randint(200, 550), randint(300, 472)), 2: (randint(200, 550), randint(300, 472)),
+           3: (randint(200, 550), randint(300, 472)), 4: (randint(200, 550), randint(300, 472)),
+           5: (randint(200, 550), randint(300, 472)), 6: (randint(200, 550), randint(300, 472))}
     lvl_now = 1
 
     def __init__(self):
@@ -119,7 +122,7 @@ class On:
         running = True
         clock = pygame.time.Clock()
         fon = pygame.transform.scale(load_image('fon_zap.jpg'), (width, height))
-        v = 50  # пикселей в секунду
+        v = 60  # пикселей в секунду
         fps = 60
         lifes = 3
         while running:
@@ -132,7 +135,7 @@ class On:
                     self.push.update(-5)
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_UP and self.push.came:
                     self.push.update(5)
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and not flying and self.push.came and lifes!=0:
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and not flying and self.push.came and lifes != 0:
                     self.ball = Ball(self.push.angle, v,
                                      self.push.rect.x + int(
                                          math.cos(math.radians(self.push.angle)) * 100 + self.push.angle * 0.14),

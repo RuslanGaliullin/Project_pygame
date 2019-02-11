@@ -4,6 +4,7 @@ import math
 
 pygame.init()
 
+clock = pygame.time.Clock()
 pygame.key.set_repeat(200, 70)
 second_all_sprite = pygame.sprite.Group()
 pushka_sprite = pygame.sprite.Group()
@@ -55,9 +56,6 @@ class Ball(pygame.sprite.Sprite):
             self.vresalsy = True
             On.mishen.new_lvl(On.mishen.lvl_now + 1)
 
-    def get_event(self, event):
-        pass
-
 
 class Pushka(pygame.sprite.Sprite):
     imagee = load_image('pushka.png')
@@ -67,7 +65,7 @@ class Pushka(pygame.sprite.Sprite):
         self.image = Pushka.imagee
         self.rect = pygame.Rect(-50, 296, 50, 50)
         self.angle = 0
-        self.defult = (100, self.rect.y + 54)
+        self.defult = (50, self.rect.y + 54)
         self.came = False
 
     def update(self, angle):
@@ -78,15 +76,16 @@ class Pushka(pygame.sprite.Sprite):
             self.rect.y = self.defult[1] - (54 * math.cos(math.radians(self.angle))) - self.angle
 
     def coming(self):
-        if self.rect.x != 100 and not self.came:
+        if self.rect.x != 50 and not self.came:
             self.rect.x += 2
+            clock.tick(30)
         else:
             self.came = True
 
 
 class Mishen(pygame.sprite.Sprite):
     image = load_image('mishen.png')
-    lvl = {1: (width-50, height-150), 2: (width-250, height-150),3: (width-250, height-150), 4: (width-250, height-150)}
+    lvl = {1: (width-50, height-150), 2: (300, 200), 3: (170, 60), 4: (0,0)}
     lvl_now = 1
 
     def __init__(self):
@@ -127,7 +126,6 @@ class On:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT or lifes == 0:
                     running = False
-
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN and self.push.came:
                     self.push.update(-5)
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_UP and self.push.came:

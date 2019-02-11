@@ -111,20 +111,19 @@ def generate_level(level):
 
 def start_screen():
     WIDTH, HEIGHT = 600, 600
-    intro_text = ["МИНИ ИГРА ПУШКА", "",
-                  "Никаких правил",
-                  "Я старался"]
+    intro_text = ["       Level Two", "",
+                  "       Press to start"]
 
     fon = pygame.transform.scale(load_image('fon.jpg'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
     font = pygame.font.Font(None, 30)
-    text_coord = 50
+    text_coord = 30
     for line in intro_text:
-        string_rendered = font.render(line, 1, pygame.Color('black'))
+        string_rendered = font.render(line, 1, pygame.Color('white'))
         intro_rect = string_rendered.get_rect()
-        text_coord += 10
+        text_coord += 5
         intro_rect.top = text_coord
-        intro_rect.x = 10
+        intro_rect.x = 5
         text_coord += intro_rect.height
         screen.blit(string_rendered, intro_rect)
 
