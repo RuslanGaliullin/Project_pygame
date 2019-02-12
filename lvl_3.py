@@ -8,7 +8,7 @@ from fire_1 import On
 
 FPS = 50
 pygame.init()
-screen = pygame.display.set_mode((400, 400))
+screen = pygame.display.set_mode((420, 420))
 clock = pygame.time.Clock()
 pygame.key.set_repeat(200, 70)
 
@@ -54,9 +54,9 @@ player_group = pygame.sprite.Group()
 tile_images = {
     'wall': load_image('wall.jpg'),
     'empty': load_image('flor.jpg'),
-    'chel': load_image('chel.png'),
-    'coin': load_image('coin.png'),
-    'finish': load_image('finish_1.png')
+    'chel': load_image('chel_2.png'),
+    'coin': load_image('coin_2.png'),
+    'finish': load_image('finish_2.png')
 }
 tiles = {}
 tile_width = tile_height = 30
@@ -111,13 +111,13 @@ def generate_level(level):
 
 
 def end():
-    WIDTH, HEIGHT = 400, 400
+    WIDTH, HEIGHT = 420, 420
     fon = pygame.transform.scale(load_image('fon.jpg'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
 
 
 def start_screen():
-    WIDTH, HEIGHT = 400, 400
+    WIDTH, HEIGHT = 420, 420
     intro_text = ["МИНИ ИГРА ПУШКА", "",
                   "Никаких правил",
                   "Я старался"]
@@ -147,7 +147,7 @@ def start_screen():
             if event.type == pygame.QUIT:
                 terminate()
             if event.type == pygame.MOUSEBUTTONDOWN and not drawing:
-                pole = load_level('level_3.txt')
+                pole = load_level('level_4.txt')
                 a = generate_level(pole)
                 for i in range(len(pole)):
                     pole[i] = list(pole[i])
