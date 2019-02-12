@@ -131,6 +131,8 @@ def start_screen():
     running = True
     drawing = False
     second = False  # активация второго холста
+    x_player_start = None
+    y_player_start = None
     complete = (0, 0)  # смешение игрока при прохождении задания
     all_screens = {1: screen}
     while running:
@@ -147,6 +149,8 @@ def start_screen():
                 x_player = player.rect.x // tile_width
                 y_player = player.rect.y // tile_width
                 drawing = True
+                x_player_start = x_player
+                y_player_start = y_player
             if event.type == pygame.KEYDOWN and event.key == pygame.K_3 and not drawing:
                 running = False
                 from lvl_3 import start_screen as third_lvl
@@ -264,6 +268,15 @@ def start_screen():
                 x_player += complete[0]
                 y_player += complete[1]
                 tiles[(x_player, y_player)].change(load_image('flor.jpg'))
+            else:
+                pole = load_level('level_2.txt')
+                a = generate_level(pole)
+                for i in range(len(pole)):
+                    pole[i] = list(pole[i])
+                player = a[0]
+                x_player = player.rect.x // tile_width
+                y_player = player.rect.y // tile_width
+                coins = 0
             second = False
         else:
             screen.blit(all_screens[1], (0, 0))

@@ -150,15 +150,15 @@ def start_screen():
     second = False  # активация второго холста
     complete = (0, 0)  # смешение игрока при прохождении задания
     all_screens = {1: screen}
-    coins = 0
     running = True
+    x_player_start = None
+    y_player_start = None
     while running:
         # all_sprites.draw(screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
             if event.type == pygame.MOUSEBUTTONDOWN and not drawing:
-
                 pole = load_level('level_1.txt')
                 a = generate_level(pole)
                 for i in range(len(pole)):
@@ -166,6 +166,9 @@ def start_screen():
                 player = a[0]
                 x_player = player.rect.x // tile_width
                 y_player = player.rect.y // tile_width
+                x_player_start = x_player
+                y_player_start = y_player
+                coins = 0
                 drawing = True
             if event.type == pygame.KEYDOWN and event.key == pygame.K_2 and not drawing:
                 from lvl_2 import start_screen as second_lvl
@@ -287,6 +290,16 @@ def start_screen():
                 x_player += complete[0]
                 y_player += complete[1]
                 tiles_group.remove(tiles[(x_player, y_player)])
+            else:
+                player_group.remove(player)
+                pole = load_level('level_1.txt')
+                a = generate_level(pole)
+                for i in range(len(pole)):
+                    pole[i] = list(pole[i])
+                player = a[0]
+                x_player = player.rect.x // tile_width
+                y_player = player.rect.y // tile_width
+                coins = 0
             second = False
         else:
             screen.blit(all_screens[1], (0, 0))
