@@ -126,7 +126,6 @@ class On:
         pass
 
     def polet(self):
-
         self.hearts = [] # создание сердец
         x_pos = 300
         for i in range(3):
@@ -169,10 +168,13 @@ class On:
                     self.hearts.pop(-1)
                 elif self.ball.vresalsy:
                     self.push.update(self.push.angle * -1)
-                    clock.tick(1)
                     flying = False
                     second_all_sprite.remove(self.ball)
                     running = False
+                    for i in self.hearts:
+                        second_all_sprite.remove(i)
+            if lifes == 0:
+                running = False
             self.push.coming()
             second_all_sprite.draw(self.screen)
             pygame.display.flip()
