@@ -13,8 +13,10 @@ pygame.key.set_repeat(200, 70)
 
 
 pygame.mixer.music.load('data/fon.mp3')
-#sound1 = pygame.mixer.Sound('data/klk.mp3')
 pygame.mixer.music.play(-1)
+
+#sound1 = pygame.mixer.Sound('data/klk.mp3')
+#sound1.play()
 
 
 def load_image(name, colorkey=None):
