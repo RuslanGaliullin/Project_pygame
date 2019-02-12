@@ -53,6 +53,11 @@ class Ball(pygame.sprite.Sprite):
             self.rect.y = self.top - (int(self.pos_x * math.tan(math.radians(self.a)) - (9.8 * self.pos_x ** 2) / (
                     2 * self.v ** 2 * math.cos(math.radians(self.a)) ** 2)))
         else:
+            #pygame.mixer.music.load('data/klk.mp3')
+            #pygame.mixer.music.play(0)
+            #pygame.time.delay(5000)
+            #pygame.mixer.music.load('data/fon.mp3')
+            #pygame.mixer.music.play(-1)
             self.vresalsy = True
             On.mishen.new_lvl(On.mishen.lvl_now + 1)
 
