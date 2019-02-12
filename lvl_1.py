@@ -167,8 +167,6 @@ def start_screen():
                 x_player = player.rect.x // tile_width
                 y_player = player.rect.y // tile_width
                 drawing = True
-                pygame.mixer.music.load('data/fon.mp3')
-                pygame.mixer.music.play(-1)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_2 and not drawing:
                 from lvl_2 import start_screen as second_lvl
                 second_lvl()
