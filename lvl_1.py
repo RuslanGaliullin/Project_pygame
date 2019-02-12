@@ -12,6 +12,11 @@ clock = pygame.time.Clock()
 pygame.key.set_repeat(200, 70)
 
 
+pygame.mixer.music.load('data/fon.mp3')
+#sound1 = pygame.mixer.Sound('data/klk.mp3')
+pygame.mixer.music.play(-1)
+
+
 def load_image(name, colorkey=None):
     fullname = os.path.join('data', name)
     try:
@@ -139,6 +144,7 @@ def start_screen():
             if event.type == pygame.QUIT:
                 terminate()
             if event.type == pygame.MOUSEBUTTONDOWN and not drawing:
+
                 pole = load_level('level_1.txt')
                 a = generate_level(pole)
                 for i in range(len(pole)):
