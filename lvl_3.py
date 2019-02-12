@@ -112,15 +112,14 @@ def generate_level(level):
 
 def end():
     WIDTH, HEIGHT = 420, 420
-    fon = pygame.transform.scale(load_image('fon.jpg'), (WIDTH, HEIGHT))
+    fon = pygame.transform.scale(load_image('win.png'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
 
 
 def start_screen():
     WIDTH, HEIGHT = 420, 420
-    intro_text = ["МИНИ ИГРА ПУШКА", "",
-                  "Никаких правил",
-                  "Я старался"]
+    intro_text = ["       Level Trhird", "",
+                  "       Press to start"]
 
     fon = pygame.transform.scale(load_image('fon.jpg'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
@@ -136,6 +135,7 @@ def start_screen():
         screen.blit(string_rendered, intro_rect)
 
     drawing = False
+    win = False
     second = False  # активация второго холста
     complete = (0, 0)  # смешение игрока при прохождении задания
     all_screens = {1: screen}
@@ -170,7 +170,7 @@ def start_screen():
                     tiles_group.remove(tiles[(x_player, y_player)])
                     player.rotate(180)
                 elif x_player - 1 >= 0 and pole[y_player][x_player - 1] == 'f' and coins == 3:
-                    end()
+                    win = True
                 elif x_player - 1 >= 0 and pole[y_player][x_player - 1] != '#':
                     if pole[y_player][x_player] != 'f':
                         pole[y_player][x_player] = '.'
@@ -186,7 +186,7 @@ def start_screen():
                     complete = (1, 0)
                     player.rotate(0)
                 elif x_player + 1 < len(pole[0]) and pole[y_player][x_player + 1] == 'f' and coins == 3:
-                    end()
+                    win = True
                 elif x_player + 1 < len(pole[0]) and pole[y_player][x_player + 1] == 'c':
                     coins += 1
                     pole[y_player][x_player] = '.'
@@ -210,7 +210,7 @@ def start_screen():
                     complete = (0, 1)
                     player.rotate(-90)
                 elif y_player + 1 < len(pole) and pole[y_player + 1][x_player] == 'f' and coins == 3:
-                    end()
+                    win = True
                 elif y_player + 1 < len(pole) and pole[y_player + 1][x_player] == 'c':
                     coins += 1
                     pole[y_player][x_player] = '.'
@@ -234,7 +234,8 @@ def start_screen():
                     complete = (0, -1)
                     player.rotate(90)
                 elif y_player - 1 >= 0 and pole[y_player - 1][x_player] == 'f' and coins == 3:
-                    end()
+                    win = True
+                    player.rect.y -= tile_width
                 elif y_player - 1 >= 0 and pole[y_player - 1][x_player] == 'c':
                     coins += 1
                     pole[y_player][x_player] = '.'
@@ -281,6 +282,9 @@ def start_screen():
         else:
             screen.blit(all_screens[1], (0, 0))
         pygame.display.flip()
+        if win:
+            drawing = False
+            end = ()
         clock.tick(FPS)
 
 
