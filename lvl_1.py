@@ -118,7 +118,18 @@ def generate_level(level):
 def start_screen():
     WIDTH, HEIGHT = 400, 400
     intro_text = ["       MINI GAME PUSHKA", "",
-                  "       Press to start"]
+                  "       Press to start",
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '                  Press 1, 2 or 3 to choose lvl']
 
     fon = pygame.transform.scale(load_image('fon.jpg'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
@@ -138,7 +149,8 @@ def start_screen():
     complete = (0, 0)  # смешение игрока при прохождении задания
     all_screens = {1: screen}
     coins = 0
-    while True:
+    running = True
+    while running:
         # all_sprites.draw(screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -153,6 +165,12 @@ def start_screen():
                 x_player = player.rect.x // tile_width
                 y_player = player.rect.y // tile_width
                 drawing = True
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_2 and not drawing:
+                from lvl_2 import start_screen as second_lvl
+                second_lvl()
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_3 and not drawing:
+                from lvl_3 import start_screen as third_lvl
+                third_lvl()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT and drawing:
                 if x_player - 1 >= 0 and pole[y_player][x_player - 1] == 'p':
                     smth = On()

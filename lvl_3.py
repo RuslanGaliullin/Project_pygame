@@ -136,12 +136,13 @@ def start_screen():
 
     drawing = False
     win = False
+    running = True
     second = False  # активация второго холста
     complete = (0, 0)  # смешение игрока при прохождении задания
     all_screens = {1: screen}
     camera = Camera()
     coins = 0
-    while True:
+    while running:
         # all_sprites.draw(screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

@@ -149,6 +149,7 @@ class On:
                     flying = False
                     lifes -= 1
                 elif self.ball.vresalsy:
+                    self.push.update(self.push.angle * -1)
                     clock.tick(2)
                     flying = False
                     second_all_sprite.remove(self.ball)

@@ -128,11 +128,12 @@ def start_screen():
         screen.blit(string_rendered, intro_rect)
 
     coins = 0
+    running = True
     drawing = False
     second = False  # активация второго холста
     complete = (0, 0)  # смешение игрока при прохождении задания
     all_screens = {1: screen}
-    while True:
+    while running:
         # all_sprites.draw(screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -146,6 +147,10 @@ def start_screen():
                 x_player = player.rect.x // tile_width
                 y_player = player.rect.y // tile_width
                 drawing = True
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_3 and not drawing:
+                running = False
+                from lvl_3 import start_screen as third_lvl
+                third_lvl()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT and drawing:
                 if x_player - 1 >= 0 and pole[y_player][x_player - 1] == 'p':
                     smth = On()
