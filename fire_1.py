@@ -90,7 +90,7 @@ class Pushka(pygame.sprite.Sprite):
 
 class Mishen(pygame.sprite.Sprite):
     image = load_image('mishen.png')
-    lvl = {1: (width-50, height-150), 2: (300, 200), 3: (170, 60), 4: (0,0)}
+    lvl = {1: (width - 50, height - 150), 2: (300, 200), 3: (170, 60), 4: (0, 0)}
     lvl_now = 1
 
     def __init__(self):
@@ -107,6 +107,15 @@ class Mishen(pygame.sprite.Sprite):
         self.lvl_now = lvl_new
 
 
+class Heart(pygame.sprite.Sprite):
+    imagee = load_image('heart.png')
+
+    def __init__(self, pos_x):
+        super().__init__(pushka_sprite, second_all_sprite)
+        self.image = Heart.imagee
+        self.rect = pygame.Rect(pos_x, 50, 30, 26)
+
+
 class On:
     push = Pushka()
     mishen = Mishen()
@@ -117,6 +126,14 @@ class On:
         pass
 
     def polet(self):
+
+        self.hearts = [] # создание сердец
+        x_pos = 300
+        for i in range(3):
+            c = Heart(x_pos)
+            x_pos += 30
+            self.hearts.append(c)
+
         self.push.came = False
         self.push.rect.x = -50
         flying = False  # снаряд летит
@@ -135,7 +152,7 @@ class On:
                     self.push.update(-5)
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_UP and self.push.came:
                     self.push.update(5)
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and not flying and self.push.came and lifes!=0:
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and not flying and self.push.came and lifes != 0:
                     self.ball = Ball(self.push.angle, v,
                                      self.push.rect.x + int(
                                          math.cos(math.radians(self.push.angle)) * 100 + self.push.angle * 0.14),
@@ -148,9 +165,11 @@ class On:
                     second_all_sprite.remove(self.ball)
                     flying = False
                     lifes -= 1
+                    second_all_sprite.remove(self.hearts[-1])
+                    self.hearts.pop(-1)
                 elif self.ball.vresalsy:
                     self.push.update(self.push.angle * -1)
-                    clock.tick(2)
+                    clock.tick(1)
                     flying = False
                     second_all_sprite.remove(self.ball)
                     running = False

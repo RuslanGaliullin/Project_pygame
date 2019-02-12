@@ -106,6 +106,15 @@ class Mishen(pygame.sprite.Sprite):
         self.lvl_now = lvl_new
 
 
+class Heart(pygame.sprite.Sprite):
+    imagee = load_image('heart.png')
+
+    def __init__(self, pos_x):
+        super().__init__(pushka_sprite, second_all_sprite)
+        self.image = Heart.imagee
+        self.rect = pygame.Rect(pos_x, 50, 30, 26)
+
+
 class On:
     push = Pushka()
     mishen = Mishen()
@@ -116,6 +125,14 @@ class On:
         pass
 
     def polet(self):
+
+        self.hearts = []  # создание сердец
+        x_pos = 300
+        for i in range(3):
+            c = Heart(x_pos)
+            x_pos += 30
+            self.hearts.append(c)
+
         self.push.came = False
         self.push.rect.x = -50
         flying = False  # снаряд летит
