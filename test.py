@@ -8,7 +8,7 @@ sc = pygame.display.set_mode((400, 300))
 pygame.mixer.music.load('data/klk.mp3')
 pygame.mixer.music.play(-1)
 
-sound1 = pygame.mixer.Sound('data/klk.mp3')
+sound1 = pygame.mixer.Sound('data/fon.mp3')
 sound2 = pygame.mixer.Sound('one.ogg')
 
 while True:
