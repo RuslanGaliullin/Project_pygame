@@ -30,7 +30,7 @@ def load_image(name, colorkey=None):
     return image
 
 
-class Ball(pygame.sprite.Sprite): #спрайт ядра
+class Ball(pygame.sprite.Sprite):  # спрайт ядра
     image = load_image("ball.png")
 
     def __init__(self, a, v, x, y):
@@ -54,16 +54,16 @@ class Ball(pygame.sprite.Sprite): #спрайт ядра
             self.rect.y = self.top - (int(self.pos_x * math.tan(math.radians(self.a)) - (9.8 * self.pos_x ** 2) / (
                     2 * self.v ** 2 * math.cos(math.radians(self.a)) ** 2)))
         else:
-            #pygame.mixer.music.load('data/klk.mp3')
-            #pygame.mixer.music.play(0)
-            #pygame.time.delay(5000)
-            #pygame.mixer.music.load('data/fon.mp3')
-            #pygame.mixer.music.play(-1)
+            # pygame.mixer.music.load('data/klk.mp3')
+            # pygame.mixer.music.play(0)
+            # pygame.time.delay(5000)
+            # pygame.mixer.music.load('data/fon.mp3')
+            # pygame.mixer.music.play(-1)
             self.vresalsy = True
             On.mishen.new_lvl()
 
 
-class Pushka(pygame.sprite.Sprite): # спрайт пушки
+class Pushka(pygame.sprite.Sprite):  # спрайт пушки
     imagee = load_image('pushka.png')
 
     def __init__(self):
@@ -89,22 +89,21 @@ class Pushka(pygame.sprite.Sprite): # спрайт пушки
             self.came = True
 
 
-class Mishen(pygame.sprite.Sprite): #спрайт мишени
+class Mishen(pygame.sprite.Sprite):  # спрайт мишени
     image = load_image('mishen.png')
-    lvl = {1: (randint(200, 353), randint(150, 272)), 2: (randint(200, 353), randint(150,272)),
+    lvl = {1: (randint(200, 353), randint(150, 272)), 2: (randint(200, 353), randint(150, 272)),
            3: (randint(200, 353), randint(150, 272)), 4: (randint(200, 353), randint(150, 272))}
     lvl_now = 1
 
     def __init__(self):
         super().__init__(mishen_sprite, second_all_sprite)
-        print(Mishen.lvl_now)
         self.image = Mishen.image
         self.rect = self.image.get_rect()
         self.rect.x = Mishen.lvl[self.lvl_now][0]
         self.rect.y = Mishen.lvl[self.lvl_now][1]
         self.mask = pygame.mask.from_surface(self.image)
 
-    def new_lvl(self,):
+    def new_lvl(self, ):
         self.rect.x = randint(200, 353)
         self.rect.y = randint(150, 272)
 
@@ -129,7 +128,7 @@ class On:
 
     def polet(self):
 
-        self.hearts = [] # создание сердец
+        self.hearts = []  # создание сердец
         x_pos = 300
         for i in range(3):
             c = Heart(x_pos)
@@ -160,7 +159,7 @@ class On:
                                          math.cos(math.radians(self.push.angle)) * 100 + self.push.angle * 0.14),
                                      self.push.rect.y - int(
                                          math.sin(math.radians(self.push.angle)) * 75) + self.push.angle * 0.84 + 10)
-                    flying = True #полет ядра
+                    flying = True  # полет ядра
             if flying:
                 self.ball.update(mishen_sprite)
                 if self.ball.rect[0] >= 1000 or self.ball.rect[1] > (self.push.rect[1] + 50):
@@ -184,4 +183,4 @@ class On:
             second_all_sprite.draw(self.screen)
             pygame.display.flip()
             clock.tick(100)
-#Остальные уровни работают аналогично
+# Остальные уровни работают аналогично
