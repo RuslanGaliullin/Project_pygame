@@ -173,9 +173,10 @@ class On:
                     running = False
                     for i in self.hearts:
                         second_all_sprite.remove(i)
+                clock.tick(2000)
             if lifes == 0:
                 running = False
             self.push.coming()
             second_all_sprite.draw(self.screen)
             pygame.display.flip()
-            clock.tick(fps)
+            clock.tick(100)
