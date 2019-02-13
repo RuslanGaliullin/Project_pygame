@@ -1,13 +1,16 @@
 import pygame
 import os
 
+pygame.init()
+screen = pygame.display.set_mode((400, 400))
+all_sprites = pygame.sprite.Group()
 
 def load_image(name, colorkey=None):
     fullname = os.path.join('data', name)
     try:
         image = pygame.image.load(fullname)
-
     except pygame.error as message:
+        print('Cannot load image:', name)
         raise SystemExit(message)
     image = image.convert_alpha()
     if colorkey is not None:
@@ -17,16 +20,19 @@ def load_image(name, colorkey=None):
     return image
 
 
-class Walls(pygame.sprite.Sprite):
-    image = load_image("wall.jpg")
+class Coin(pygame.sprite.Sprite):
+    image = load_image("coin.png")
 
-    def __init__(self, group, pos):
+    def __init__(self, group, x, y):
         # НЕОБХОДИМО вызвать конструктор родительского класса Sprite.
-        # Это очень важно!!!
+        # Это очень важно !!!
         super().__init__(group)
-        self.image = Walls.image
+        self.image = Coin.image
         self.rect = self.image.get_rect()
-        self.rect.x = pos[0]
-        self.rect.y = pos[1]
-        self.rect.width = 27  # like size of the every part of board.cell_size - 1
-        self.rect.height = 0
+        self.mask = pygame.mask.from_surface(self.image)
+
+    def update(self):
+        pass
+
+    def get_event(self, event):
+        pass
