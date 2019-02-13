@@ -11,15 +11,15 @@ screen = pygame.display.set_mode((400, 400))
 clock = pygame.time.Clock()
 pygame.key.set_repeat(200, 70)
 
-
 pygame.mixer.music.load('data/fon.mp3')
 pygame.mixer.music.play(-1)
 
-#sound1 = pygame.mixer.Sound('data/klk.mp3')
-#sound1.play()
+
+# sound1 = pygame.mixer.Sound('data/klk.mp3')
+# sound1.play()
 
 
-def load_image(name, colorkey=None):
+def load_image(name, colorkey=None):  # загрузка картинок
     fullname = os.path.join('data', name)
     try:
         image = pygame.image.load(fullname)
@@ -39,7 +39,7 @@ def terminate():
     sys.exit()
 
 
-def load_level(filename):
+def load_level(filename):  # загрузка левлов
     filename = "data/" + filename
     # читаем уровень, убирая символы перевода строки
     with open(filename, 'r') as mapFile:
@@ -153,7 +153,7 @@ def start_screen():
     running = True
     x_player_start = None
     y_player_start = None
-    while running:
+    while running:  # основоной цикл
         # all_sprites.draw(screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -176,9 +176,9 @@ def start_screen():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_3 and not drawing:
                 from lvl_3 import start_screen as third_lvl
                 third_lvl()
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT and drawing:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT and drawing:  # передвижение
                 if x_player - 1 >= 0 and pole[y_player][x_player - 1] == 'p':
-                    smth = On()
+                    smth = On()  # наступил на мишень
                     second = True
                     complete = (-1, 0)
                     player.rotate(180)
@@ -282,7 +282,7 @@ def start_screen():
         if second:
             smth.polet()
             screen.blit(smth.screen, (0, 0))
-            if smth.ball is not None and smth.ball.vresalsy:
+            if smth.ball is not None and smth.ball.vresalsy:  # попал в мишень
                 player.rect.x += tile_width * complete[0]
                 player.rect.y += tile_width * complete[1]
                 pole[y_player + complete[1]][x_player + complete[0]] = '.'
@@ -291,7 +291,7 @@ def start_screen():
                 y_player += complete[1]
                 tiles_group.remove(tiles[(x_player, y_player)])
             else:
-                smth.mishen.lvl_now = 1
+                smth.mishen.lvl_now = 1  # промахнулся в мишень
                 player_group.remove(player)
                 pole = load_level('level_1.txt')
                 a = generate_level(pole)
@@ -309,3 +309,4 @@ def start_screen():
 
 
 start_screen()
+#Остальные уровни работают аналогично

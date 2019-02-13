@@ -30,7 +30,7 @@ def load_image(name, colorkey=None):
     return image
 
 
-class Ball(pygame.sprite.Sprite):
+class Ball(pygame.sprite.Sprite): #спрайт ядра
     image = load_image("ball.png")
 
     def __init__(self, a, v, x, y):
@@ -63,7 +63,7 @@ class Ball(pygame.sprite.Sprite):
             On.mishen.new_lvl()
 
 
-class Pushka(pygame.sprite.Sprite):
+class Pushka(pygame.sprite.Sprite): # спрайт пушки
     imagee = load_image('pushka.png')
 
     def __init__(self):
@@ -89,7 +89,7 @@ class Pushka(pygame.sprite.Sprite):
             self.came = True
 
 
-class Mishen(pygame.sprite.Sprite):
+class Mishen(pygame.sprite.Sprite): #спрайт мишени
     image = load_image('mishen.png')
     lvl = {1: (randint(200, 353), randint(150, 272)), 2: (randint(200, 353), randint(150,272)),
            3: (randint(200, 353), randint(150, 272)), 4: (randint(200, 353), randint(150, 272))}
@@ -160,7 +160,7 @@ class On:
                                          math.cos(math.radians(self.push.angle)) * 100 + self.push.angle * 0.14),
                                      self.push.rect.y - int(
                                          math.sin(math.radians(self.push.angle)) * 75) + self.push.angle * 0.84 + 10)
-                    flying = True
+                    flying = True #полет ядра
             if flying:
                 self.ball.update(mishen_sprite)
                 if self.ball.rect[0] >= 1000 or self.ball.rect[1] > (self.push.rect[1] + 50):
@@ -184,3 +184,4 @@ class On:
             second_all_sprite.draw(self.screen)
             pygame.display.flip()
             clock.tick(100)
+#Остальные уровни работают аналогично
