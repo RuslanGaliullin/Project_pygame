@@ -1,6 +1,7 @@
 import pygame
 import os
 import math
+from random import randint
 
 pygame.init()
 
@@ -59,7 +60,7 @@ class Ball(pygame.sprite.Sprite):
             #pygame.mixer.music.load('data/fon.mp3')
             #pygame.mixer.music.play(-1)
             self.vresalsy = True
-            On.mishen.new_lvl(On.mishen.lvl_now + 1)
+            On.mishen.new_lvl()
 
 
 class Pushka(pygame.sprite.Sprite):
@@ -90,21 +91,22 @@ class Pushka(pygame.sprite.Sprite):
 
 class Mishen(pygame.sprite.Sprite):
     image = load_image('mishen.png')
-    lvl = {1: (width - 50, height - 150), 2: (300, 200), 3: (170, 60), 4: (0, 0)}
+    lvl = {1: (randint(200, 353), randint(150, 272)), 2: (randint(200, 353), randint(150,272)),
+           3: (randint(200, 353), randint(150, 272)), 4: (randint(200, 353), randint(150, 272))}
     lvl_now = 1
 
     def __init__(self):
         super().__init__(mishen_sprite, second_all_sprite)
+        print(Mishen.lvl_now)
         self.image = Mishen.image
         self.rect = self.image.get_rect()
         self.rect.x = Mishen.lvl[self.lvl_now][0]
         self.rect.y = Mishen.lvl[self.lvl_now][1]
         self.mask = pygame.mask.from_surface(self.image)
 
-    def new_lvl(self, lvl_new):
-        self.rect.x = self.lvl[lvl_new][0]
-        self.rect.y = self.lvl[lvl_new][1]
-        self.lvl_now = lvl_new
+    def new_lvl(self,):
+        self.rect.x = randint(200, 353)
+        self.rect.y = randint(150, 272)
 
 
 class Heart(pygame.sprite.Sprite):
@@ -126,6 +128,7 @@ class On:
         pass
 
     def polet(self):
+
         self.hearts = [] # создание сердец
         x_pos = 300
         for i in range(3):
@@ -176,6 +179,7 @@ class On:
                 clock.tick(2000)
             if lifes == 0:
                 running = False
+                self.push.update(self.push.angle * -1)
             self.push.coming()
             second_all_sprite.draw(self.screen)
             pygame.display.flip()

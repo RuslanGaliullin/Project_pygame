@@ -54,7 +54,7 @@ class Ball(pygame.sprite.Sprite):
                     2 * self.v ** 2 * math.cos(math.radians(self.a)) ** 2)))
         else:
             self.vresalsy = True
-            On.mishen.new_lvl(On.mishen.lvl_now + 1)
+            On.mishen.new_lvl()
 
     def get_event(self, event):
         pass
@@ -100,10 +100,9 @@ class Mishen(pygame.sprite.Sprite):
         self.rect.y = Mishen.lvl[self.lvl_now][1]
         self.mask = pygame.mask.from_surface(self.image)
 
-    def new_lvl(self, lvl_new):
-        self.rect.x = self.lvl[lvl_new][0]
-        self.rect.y = self.lvl[lvl_new][1]
-        self.lvl_now = lvl_new
+    def new_lvl(self,):
+        self.rect.x = randint(200, 550)
+        self.rect.y = randint(300, 472)
 
 
 class Heart(pygame.sprite.Sprite):
@@ -140,7 +139,7 @@ class On:
         clock = pygame.time.Clock()
         fon = pygame.transform.scale(load_image('fon_zap.jpg'), (width, height))
         v = 60  # пикселей в секунду
-        fps = 60
+        fps = 100
         lifes = 3
         while running:
             self.screen.blit(fon, (0, 0))
@@ -177,6 +176,7 @@ class On:
                         second_all_sprite.remove(i)
                 clock.tick(2000)
             if lifes == 0:
+                self.push.update(self.push.angle * -1)
                 running = False
             self.push.coming()
             second_all_sprite.draw(self.screen)

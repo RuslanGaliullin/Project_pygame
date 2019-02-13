@@ -284,6 +284,7 @@ def start_screen():
                 y_player += complete[1]
                 tiles[(x_player, y_player)].change(load_image('flor.jpg'))
             else:
+                smth.mishen.lvl_now = 1
                 pole = load_level('level_4.txt')
                 a = generate_level(pole)
                 for i in range(len(pole)):

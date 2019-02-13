@@ -291,6 +291,7 @@ def start_screen():
                 y_player += complete[1]
                 tiles_group.remove(tiles[(x_player, y_player)])
             else:
+                smth.mishen.lvl_now = 1
                 player_group.remove(player)
                 pole = load_level('level_1.txt')
                 a = generate_level(pole)
