@@ -7,7 +7,6 @@ from Camer_3 import Camera
 from fire_3 import On
 
 FPS = 50
-pygame.init()
 screen = pygame.display.set_mode((420, 420))
 clock = pygame.time.Clock()
 pygame.key.set_repeat(200, 70)
@@ -34,6 +33,7 @@ def terminate():
 
 
 def load_level(filename):
+    pygame.init()
     filename = "data/" + filename
     # читаем уровень, убирая символы перевода строки
     with open(filename, 'r') as mapFile:
@@ -110,23 +110,36 @@ def generate_level(level):
     return new_player, x, y
 
 
-def end():
+def end(time1, time2, time3):
     WIDTH, HEIGHT = 420, 420
+    intro_text = ['Your time: ' + str(time3)]
     fon = pygame.transform.scale(load_image('win.png'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
+    font = pygame.font.Font(None, 30)
+    text_coord = 10
+    for line in intro_text:
+        string_rendered = font.render(line, 1, pygame.Color('white'))
+        intro_rect = string_rendered.get_rect()
+        text_coord += 1
+        intro_rect.top = text_coord
+        intro_rect.x = 1
+        text_coord += intro_rect.height
+        screen.blit(string_rendered, intro_rect)
 
 
-def start_screen():
+def start_screen(time1, time2):
     WIDTH, HEIGHT = 420, 420
+    print(time1, time2)
     intro_text = ["       Level Trhird", "",
-                  "       Press to start"]
+                  "       Press to start",
+                  'time on the second lvl is ' + str(time1)]
 
     fon = pygame.transform.scale(load_image('fon.jpg'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
     font = pygame.font.Font(None, 30)
     text_coord = 10
     for line in intro_text:
-        string_rendered = font.render(line, 1, pygame.Color('white'))
+        string_rendered = font.render(line, 1, pygame.Color('black'))
         intro_rect = string_rendered.get_rect()
         text_coord += 1
         intro_rect.top = text_coord
@@ -144,6 +157,8 @@ def start_screen():
     all_screens = {1: screen}
     camera = Camera()
     coins = 0
+    time_1 = time1
+    time_2 = time2
     while running:
         # all_sprites.draw(screen)
         for event in pygame.event.get():
@@ -176,6 +191,8 @@ def start_screen():
                     player.rotate(180)
                 elif x_player - 1 >= 0 and pole[y_player][x_player - 1] == 'f' and coins == 3:
                     win = True
+                    time_3 = pygame.time.get_ticks() / 1000
+                    player.rect.x -= tile_width
                 elif x_player - 1 >= 0 and pole[y_player][x_player - 1] != '#':
                     if pole[y_player][x_player] != 'f':
                         pole[y_player][x_player] = '.'
@@ -192,6 +209,8 @@ def start_screen():
                     player.rotate(0)
                 elif x_player + 1 < len(pole[0]) and pole[y_player][x_player + 1] == 'f' and coins == 3:
                     win = True
+                    time_3 = pygame.time.get_ticks() / 1000
+                    player.rect.x += tile_width
                 elif x_player + 1 < len(pole[0]) and pole[y_player][x_player + 1] == 'c':
                     coins += 1
                     pole[y_player][x_player] = '.'
@@ -216,6 +235,8 @@ def start_screen():
                     player.rotate(-90)
                 elif y_player + 1 < len(pole) and pole[y_player + 1][x_player] == 'f' and coins == 3:
                     win = True
+                    time_3 = pygame.time.get_ticks() / 1000
+                    player.rect.y += tile_width
                 elif y_player + 1 < len(pole) and pole[y_player + 1][x_player] == 'c':
                     coins += 1
                     pole[y_player][x_player] = '.'
@@ -240,6 +261,8 @@ def start_screen():
                     player.rotate(90)
                 elif y_player - 1 >= 0 and pole[y_player - 1][x_player] == 'f' and coins == 3:
                     win = True
+                    player.rect.y -= tile_width
+                    time_3 = pygame.time.get_ticks() / 1000
                     player.rect.y -= tile_width
                 elif y_player - 1 >= 0 and pole[y_player - 1][x_player] == 'c':
                     coins += 1
@@ -293,15 +316,15 @@ def start_screen():
                 x_player = player.rect.x // tile_width
                 y_player = player.rect.y // tile_width
                 coins = 0
-                
+
             second = False
         else:
             screen.blit(all_screens[1], (0, 0))
-        pygame.display.flip()
         if win:
             drawing = False
-            end = ()
+            end(time_1, time_2, time_3)
+        pygame.display.flip()
         clock.tick(FPS)
 
 
-start_screen()
+start_screen(0, 0)

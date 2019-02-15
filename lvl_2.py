@@ -1,12 +1,11 @@
-import sys
 import os
+import sys
 
 import pygame
 
 from fire_2 import On
 
 FPS = 50
-pygame.init()
 screen = pygame.display.set_mode((600, 600))
 clock = pygame.time.Clock()
 pygame.key.set_repeat(200, 70)
@@ -33,6 +32,7 @@ def terminate():
 
 
 def load_level(filename):
+    pygame.init()
     filename = "data/" + filename
     # читаем уровень, убирая символы перевода строки
     with open(filename, 'r') as mapFile:
@@ -109,10 +109,11 @@ def generate_level(level):
     return new_player, x, y
 
 
-def start_screen():
+def start_screen(time):
     WIDTH, HEIGHT = 600, 600
     intro_text = ["       Level Two", "",
-                  "       Press to start"]
+                  "       Press to start",
+                  'time on the first lvl: ' + str(time)]
 
     fon = pygame.transform.scale(load_image('fon.jpg'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
@@ -135,6 +136,7 @@ def start_screen():
     y_player_start = None
     complete = (0, 0)  # смешение игрока при прохождении задания
     all_screens = {1: screen}
+    time_1 = time
     while running:
         # all_sprites.draw(screen)
         for event in pygame.event.get():
@@ -154,7 +156,7 @@ def start_screen():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_3 and not drawing:
                 running = False
                 from lvl_3 import start_screen as third_lvl
-                third_lvl()
+                third_lvl(time_1, 0)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT and drawing:
                 if x_player - 1 >= 0 and pole[y_player][x_player - 1] == 'p':
                     smth = On()
@@ -170,8 +172,8 @@ def start_screen():
                     tiles_group.remove(tiles[(x_player, y_player)])
                     player.rotate(180)
                 elif x_player - 1 >= 0 and pole[y_player][x_player - 1] == 'f' and coins == 3:
-                    from lvl_2 import start_screen as second_lvl
-                    second_lvl()
+                    from lvl_3 import start_screen as second_lvl
+                    second_lvl(time_1, pygame.time.get_ticks() / 1000)
                 elif x_player - 1 >= 0 and pole[y_player][x_player - 1] != '#':
                     if pole[y_player][x_player] != 'f':
                         pole[y_player][x_player] = '.'
@@ -187,8 +189,8 @@ def start_screen():
                     complete = (1, 0)
                     player.rotate(0)
                 elif x_player + 1 < len(pole[0]) and pole[y_player][x_player + 1] == 'f' and coins == 3:
-                    from lvl_2 import start_screen as second_lvl
-                    second_lvl()
+                    from lvl_3 import start_screen as second_lvl
+                    second_lvl(time_1, pygame.time.get_ticks() / 1000)
                 elif x_player + 1 < len(pole[0]) and pole[y_player][x_player + 1] == 'c':
                     coins += 1
                     pole[y_player][x_player] = '.'
@@ -212,8 +214,8 @@ def start_screen():
                     complete = (0, 1)
                     player.rotate(-90)
                 elif y_player + 1 < len(pole) and pole[y_player + 1][x_player] == 'f' and coins == 3:
-                    from lvl_2 import start_screen as second_lvl
-                    second_lvl()
+                    from lvl_3 import start_screen as third_lvl
+                    third_lvl(time_1, pygame.time.get_ticks() / 1000)
                 elif y_player + 1 < len(pole) and pole[y_player + 1][x_player] == 'c':
                     coins += 1
                     pole[y_player][x_player] = '.'
@@ -237,8 +239,8 @@ def start_screen():
                     complete = (0, -1)
                     player.rotate(90)
                 elif y_player - 1 >= 0 and pole[y_player - 1][x_player] == 'f' and coins == 3:
-                    from lvl_2 import start_screen as second_lvl
-                    second_lvl()
+                    from lvl_3 import start_screen as second_lvl
+                    second_lvl(time_1, pygame.time.get_ticks() / 1000)
                 elif y_player - 1 >= 0 and pole[y_player - 1][x_player] == 'c':
                     coins += 1
                     pole[y_player][x_player] = '.'

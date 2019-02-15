@@ -6,7 +6,6 @@ import pygame
 from fire_1 import On
 
 FPS = 50
-pygame.init()
 screen = pygame.display.set_mode((400, 400))
 clock = pygame.time.Clock()
 pygame.key.set_repeat(200, 70)
@@ -39,7 +38,8 @@ def terminate():
     sys.exit()
 
 
-def load_level(filename):  # загрузка левлов
+def load_level(filename): # загрузка левлов
+    pygame.init()
     filename = "data/" + filename
     # читаем уровень, убирая символы перевода строки
     with open(filename, 'r') as mapFile:
@@ -117,7 +117,7 @@ def generate_level(level):
     return new_player, x, y
 
 
-def start_screen():
+def start_screen(time):
     WIDTH, HEIGHT = 400, 400
     intro_text = ["       MINI GAME PUSHKA", "",
                   "       Press to start",
@@ -172,10 +172,10 @@ def start_screen():
                 drawing = True
             if event.type == pygame.KEYDOWN and event.key == pygame.K_2 and not drawing:
                 from lvl_2 import start_screen as second_lvl
-                second_lvl()
+                second_lvl(0)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_3 and not drawing:
                 from lvl_3 import start_screen as third_lvl
-                third_lvl()
+                third_lvl(0,0)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT and drawing:  # передвижение
                 if x_player - 1 >= 0 and pole[y_player][x_player - 1] == 'p':
                     smth = On()  # наступил на мишень
@@ -192,7 +192,7 @@ def start_screen():
                     player.rotate(180)
                 elif x_player - 1 >= 0 and pole[y_player][x_player - 1] == 'f' and coins == 3:
                     from lvl_2 import start_screen as second_lvl
-                    second_lvl()
+                    second_lvl(pygame.time.get_ticks()/1000)
                 elif x_player - 1 >= 0 and pole[y_player][x_player - 1] != '#':
                     if pole[y_player][x_player] != 'f':
                         pole[y_player][x_player] = '.'
@@ -209,7 +209,7 @@ def start_screen():
                     player.rotate(0)
                 elif x_player + 1 < len(pole[0]) and pole[y_player][x_player + 1] == 'f' and coins == 3:
                     from lvl_2 import start_screen as second_lvl
-                    second_lvl()
+                    second_lvl(pygame.time.get_ticks()/1000)
                 elif x_player + 1 < len(pole[0]) and pole[y_player][x_player + 1] == 'c':
                     coins += 1
                     pole[y_player][x_player] = '.'
@@ -234,7 +234,7 @@ def start_screen():
                     player.rotate(-90)
                 elif y_player + 1 < len(pole) and pole[y_player + 1][x_player] == 'f' and coins == 3:
                     from lvl_2 import start_screen as second_lvl
-                    second_lvl()
+                    second_lvl(pygame.time.get_ticks()/1000)
                 elif y_player + 1 < len(pole) and pole[y_player + 1][x_player] == 'c':
                     coins += 1
                     pole[y_player][x_player] = '.'
@@ -259,7 +259,7 @@ def start_screen():
                     player.rotate(90)
                 elif y_player - 1 >= 0 and pole[y_player - 1][x_player] == 'f' and coins == 3:
                     from lvl_2 import start_screen as second_lvl
-                    second_lvl()
+                    second_lvl(pygame.time.get_ticks()/1000)
                 elif y_player - 1 >= 0 and pole[y_player - 1][x_player] == 'c':
                     coins += 1
                     pole[y_player][x_player] = '.'
@@ -308,5 +308,5 @@ def start_screen():
         clock.tick(FPS)
 
 
-start_screen()
+start_screen(0)
 #Остальные уровни работают аналогично
