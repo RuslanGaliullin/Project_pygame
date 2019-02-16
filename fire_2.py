@@ -5,6 +5,7 @@ from random import randint
 
 pygame.init()
 
+clock = pygame.time.Clock()
 pygame.key.set_repeat(200, 70)
 second_all_sprite = pygame.sprite.Group()
 pushka_sprite = pygame.sprite.Group()
@@ -29,7 +30,7 @@ def load_image(name, colorkey=None):
     return image
 
 
-class Ball(pygame.sprite.Sprite):
+class Ball(pygame.sprite.Sprite):  # спрайт ядра
     image = load_image("ball.png")
 
     def __init__(self, a, v, x, y):
@@ -53,22 +54,24 @@ class Ball(pygame.sprite.Sprite):
             self.rect.y = self.top - (int(self.pos_x * math.tan(math.radians(self.a)) - (9.8 * self.pos_x ** 2) / (
                     2 * self.v ** 2 * math.cos(math.radians(self.a)) ** 2)))
         else:
+            # pygame.mixer.music.load('data/klk.mp3')
+            # pygame.mixer.music.play(0)
+            # pygame.time.delay(5000)
+            # pygame.mixer.music.load('data/fon.mp3')
+            # pygame.mixer.music.play(-1)
             self.vresalsy = True
             On.mishen.new_lvl()
 
-    def get_event(self, event):
-        pass
 
-
-class Pushka(pygame.sprite.Sprite):
+class Pushka(pygame.sprite.Sprite):  # спрайт пушки
     imagee = load_image('pushka.png')
 
     def __init__(self):
         super().__init__(pushka_sprite, second_all_sprite)
         self.image = Pushka.imagee
-        self.rect = pygame.Rect(-50, height - 104, 50, 50)
+        self.rect = pygame.Rect(-50, 496, 50, 50)
         self.angle = 0
-        self.defult = (100, self.rect.y + 54)
+        self.defult = (80, self.rect.y + 54)
         self.came = False
 
     def update(self, angle):
@@ -79,30 +82,31 @@ class Pushka(pygame.sprite.Sprite):
             self.rect.y = self.defult[1] - (54 * math.cos(math.radians(self.angle))) - self.angle
 
     def coming(self):
-        if self.rect.x != 100 and not self.came:
-            self.rect.x += 2
+        if self.rect.x < 80 and not self.came:
+            self.rect.x += 4
+            clock.tick(30)
         else:
             self.came = True
 
 
-class Mishen(pygame.sprite.Sprite):
+class Mishen(pygame.sprite.Sprite):  # спрайт мишени
     image = load_image('mishen.png')
-    lvl = {1: (randint(200, 550), randint(300, 472)), 2: (randint(200, 550), randint(300, 472)),
-           3: (randint(200, 550), randint(300, 472)), 4: (randint(200, 550), randint(300, 472)),
-           5: (randint(200, 550), randint(300, 472)), 6: (randint(200, 550), randint(300, 472))}
+    lvl = {1: (randint(500, 553), randint(300, 372)), 2: (randint(200, 353), randint(150, 272)),
+           3: (randint(200, 353), randint(150, 272)), 4: (randint(200, 353), randint(150, 272))}
     lvl_now = 1
 
     def __init__(self):
         super().__init__(mishen_sprite, second_all_sprite)
+        print(Mishen.lvl_now)
         self.image = Mishen.image
         self.rect = self.image.get_rect()
         self.rect.x = Mishen.lvl[self.lvl_now][0]
         self.rect.y = Mishen.lvl[self.lvl_now][1]
         self.mask = pygame.mask.from_surface(self.image)
 
-    def new_lvl(self,):
-        self.rect.x = randint(200, 550)
-        self.rect.y = randint(300, 472)
+    def new_lvl(self, ):
+        self.rect.x = randint(500, 553)
+        self.rect.y = randint(300, 372)
 
 
 class Heart(pygame.sprite.Sprite):
@@ -137,16 +141,15 @@ class On:
         flying = False  # снаряд летит
         running = True
         clock = pygame.time.Clock()
-        fon = pygame.transform.scale(load_image('fon_zap.jpg'), (width, height))
-        v = 60  # пикселей в секунду
-        fps = 100
+        fon = pygame.transform.scale(load_image('fon_zap.jpg'), (600, 600))
+        v = 65  # пикселей в секунду
+        fps = 60
         lifes = 3
         while running:
             self.screen.blit(fon, (0, 0))
             for event in pygame.event.get():
                 if event.type == pygame.QUIT or lifes == 0:
                     running = False
-
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN and self.push.came:
                     self.push.update(-5)
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_UP and self.push.came:
@@ -157,7 +160,7 @@ class On:
                                          math.cos(math.radians(self.push.angle)) * 100 + self.push.angle * 0.14),
                                      self.push.rect.y - int(
                                          math.sin(math.radians(self.push.angle)) * 75) + self.push.angle * 0.84 + 10)
-                    flying = True
+                    flying = True  # полет ядра
             if flying:
                 self.ball.update(mishen_sprite)
                 if self.ball.rect[0] >= 1000 or self.ball.rect[1] > (self.push.rect[1] + 50):
@@ -168,7 +171,6 @@ class On:
                     self.hearts.pop(-1)
                 elif self.ball.vresalsy:
                     self.push.update(self.push.angle * -1)
-                    clock.tick(2)
                     flying = False
                     second_all_sprite.remove(self.ball)
                     running = False
@@ -176,9 +178,10 @@ class On:
                         second_all_sprite.remove(i)
                 clock.tick(2000)
             if lifes == 0:
-                self.push.update(self.push.angle * -1)
                 running = False
+                self.push.update(self.push.angle * -1)
             self.push.coming()
             second_all_sprite.draw(self.screen)
             pygame.display.flip()
-            clock.tick(fps)
+            if not flying:
+                clock.tick(60)

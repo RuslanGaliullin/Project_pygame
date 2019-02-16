@@ -118,7 +118,7 @@ def generate_level(level):
 
 
 def start_screen(time):
-    WIDTH, HEIGHT = 400, 400
+    WIDTH, HEIGHT = 600, 600
     intro_text = ["       MINI GAME PUSHKA", "",
                   "       Press to start",
                   '',
