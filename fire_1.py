@@ -2,6 +2,7 @@ import pygame
 import os
 import math
 from random import randint
+import time
 
 pygame.init()
 
@@ -155,6 +156,13 @@ class On:
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_UP and self.push.came:
                     self.push.update(5)
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and not flying and self.push.came and lifes != 0:
+                    pygame.mixer.music.load("data/fr.mp3")
+                    pygame.mixer.music.play()
+                    time.sleep(0.6)
+
+                    pygame.mixer.music.load("data/fon.mp3")
+                    pygame.mixer.music.play(-1)
+
                     self.ball = Ball(self.push.angle, v,
                                      self.push.rect.x + int(
                                          math.cos(math.radians(self.push.angle)) * 100 + self.push.angle * 0.14),
