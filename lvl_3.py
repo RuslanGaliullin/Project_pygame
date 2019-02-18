@@ -167,7 +167,7 @@ def start_screen(time1, time2):
             if event.type == pygame.QUIT:
                 terminate()
             if event.type == pygame.MOUSEBUTTONDOWN and not drawing:
-                pole = load_level('level_4.txt')
+                pole = load_level('level_3.txt')
                 a = generate_level(pole)
                 for i in range(len(pole)):
                     pole[i] = list(pole[i])
@@ -310,7 +310,7 @@ def start_screen(time1, time2):
                 tiles[(x_player, y_player)].change(load_image('flor.jpg'))
             else:
                 smth.mishen.lvl_now = 1
-                pole = load_level('level_4.txt')
+                pole = load_level('level_3.txt')
                 a = generate_level(pole)
                 for i in range(len(pole)):
                     pole[i] = list(pole[i])
