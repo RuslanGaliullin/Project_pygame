@@ -119,7 +119,7 @@ def generate_level(level):
 
 def start_screen():
     WIDTH, HEIGHT = 400, 400
-    intro_text = ["       MINI GAME PUSHKA", "",
+    intro_text = ["       MINI GAME PUSHKA",
                   "       Press to start",
                   '',
                   '',
@@ -131,7 +131,8 @@ def start_screen():
                   '',
                   '',
                   '',
-                  '                  Press 1, 2 or 3 to choose lvl']
+                  '',
+                  '                    Press 1, 2 or 3 to choose lvl']
 
     fon = pygame.transform.scale(load_image('fon.jpg'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))

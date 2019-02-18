@@ -121,7 +121,7 @@ def end(time1, time2, time3):
     font = pygame.font.Font(None, 30)
     text_coord = 10
     for line in intro_text:
-        string_rendered = font.render(line, 1, pygame.Color('white'))
+        string_rendered = font.render(line, 1, pygame.Color('black'))
         intro_rect = string_rendered.get_rect()
         text_coord += 1
         intro_rect.top = text_coord
@@ -328,5 +328,3 @@ def start_screen(time1, time2):
         pygame.display.flip()
         clock.tick(FPS)
 
-
-start_screen(23, 45.7870)

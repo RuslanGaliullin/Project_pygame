@@ -286,6 +286,3 @@ def start_screen(time):
             screen.blit(all_screens[1], (0, 0))
         pygame.display.flip()
         clock.tick(FPS)
-
-
-start_screen(45.7870)
