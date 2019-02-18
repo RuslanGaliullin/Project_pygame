@@ -97,7 +97,6 @@ class Mishen(pygame.sprite.Sprite):  # спрайт мишени
 
     def __init__(self):
         super().__init__(mishen_sprite, second_all_sprite)
-        print(Mishen.lvl_now)
         self.image = Mishen.image
         self.rect = self.image.get_rect()
         self.rect.x = Mishen.lvl[self.lvl_now][0]
