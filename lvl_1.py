@@ -117,8 +117,8 @@ def generate_level(level):
     return new_player, x, y
 
 
-def start_screen(time):
-    WIDTH, HEIGHT = 600, 600
+def start_screen():
+    WIDTH, HEIGHT = 400, 400
     intro_text = ["       MINI GAME PUSHKA", "",
                   "       Press to start",
                   '',
@@ -308,5 +308,5 @@ def start_screen(time):
         clock.tick(FPS)
 
 
-start_screen(0)
+start_screen()
 #Остальные уровни работают аналогично

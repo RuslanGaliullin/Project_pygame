@@ -111,9 +111,9 @@ def generate_level(level):
 
 def start_screen(time):
     WIDTH, HEIGHT = 600, 600
-    intro_text = ["       Level Two", "",
-                  "       Press to start",
-                  'time on the first lvl: ' + str(time)]
+    intro_text = ['       time on the first lvl: ' + str(time) + 'sec',
+                  "       Level Two",
+                  "       Press to start",]
 
     fon = pygame.transform.scale(load_image('fon.jpg'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
@@ -271,7 +271,8 @@ def start_screen(time):
                 y_player += complete[1]
                 tiles[(x_player, y_player)].change(load_image('flor.jpg'))
             else:
-                smth.mishen.lvl_now = 1
+                smth.mishen.lvl_now = 1  # промахнулся в мишень
+                player_group.remove(player)
                 pole = load_level('level_2.txt')
                 a = generate_level(pole)
                 for i in range(len(pole)):
@@ -285,4 +286,3 @@ def start_screen(time):
             screen.blit(all_screens[1], (0, 0))
         pygame.display.flip()
         clock.tick(FPS)
-start_screen(0)

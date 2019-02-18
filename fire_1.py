@@ -156,19 +156,14 @@ class On:
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_UP and self.push.came:
                     self.push.update(5)
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and not flying and self.push.came and lifes != 0:
-                    pygame.mixer.music.load("data/fr.mp3")
-                    pygame.mixer.music.play()
-                    time.sleep(0.6)
-
-                    pygame.mixer.music.load("data/fon.mp3")
-                    pygame.mixer.music.play(-1)
-
+                    fire_sound = pygame.mixer.Sound("data/fr.ogg")
+                    fire_sound.play()
                     self.ball = Ball(self.push.angle, v,
                                      self.push.rect.x + int(
                                          math.cos(math.radians(self.push.angle)) * 100 + self.push.angle * 0.14),
                                      self.push.rect.y - int(
                                          math.sin(math.radians(self.push.angle)) * 75) + self.push.angle * 0.84 + 10)
-                    flying = True #полет ядра
+                    flying = True
             if flying:
                 self.ball.update(mishen_sprite)
                 if self.ball.rect[0] >= 1000 or self.ball.rect[1] > (self.push.rect[1] + 50):

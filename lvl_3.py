@@ -112,7 +112,10 @@ def generate_level(level):
 
 def end(time1, time2, time3):
     WIDTH, HEIGHT = 420, 420
-    intro_text = ['Your time: ' + str(time3)]
+    intro_text = ['Level 1: ' + str(time1) + 'sec',
+                  'Level 2: ' + str(time2) + 'sec',
+                  'Level 3: ' + str(time3) + 'sec',
+                  'All time: ' + str(time1 + time3 + time2) + 'sec']
     fon = pygame.transform.scale(load_image('win.png'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
     font = pygame.font.Font(None, 30)
@@ -129,17 +132,16 @@ def end(time1, time2, time3):
 
 def start_screen(time1, time2):
     WIDTH, HEIGHT = 420, 420
-    print(time1, time2)
     intro_text = ["       Level Trhird", "",
                   "       Press to start",
-                  'time on the second lvl is ' + str(time1)]
+                  'time on the second lvl is ' + str(time2) + 'sec']
 
     fon = pygame.transform.scale(load_image('fon.jpg'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
     font = pygame.font.Font(None, 30)
     text_coord = 10
     for line in intro_text:
-        string_rendered = font.render(line, 1, pygame.Color('black'))
+        string_rendered = font.render(line, 1, pygame.Color('white'))
         intro_rect = string_rendered.get_rect()
         text_coord += 1
         intro_rect.top = text_coord
@@ -325,6 +327,3 @@ def start_screen(time1, time2):
             end(time_1, time_2, time_3)
         pygame.display.flip()
         clock.tick(FPS)
-
-
-start_screen(0, 0)

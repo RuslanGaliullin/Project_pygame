@@ -155,6 +155,8 @@ class On:
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_UP and self.push.came:
                     self.push.update(5)
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and not flying and self.push.came and lifes != 0:
+                    fire_sound = pygame.mixer.Sound("data/fr.ogg")
+                    fire_sound.play()
                     self.ball = Ball(self.push.angle, v,
                                      self.push.rect.x + int(
                                          math.cos(math.radians(self.push.angle)) * 100 + self.push.angle * 0.14),
