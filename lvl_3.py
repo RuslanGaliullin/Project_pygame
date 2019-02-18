@@ -132,9 +132,9 @@ def end(time1, time2, time3):
 
 def start_screen(time1, time2):
     WIDTH, HEIGHT = 420, 420
-    intro_text = ["       Level Trhird", "",
-                  "       Press to start",
-                  'time on the second lvl is ' + str(time2) + 'sec']
+    intro_text = ["       Level Third",
+                  "       Press to start", '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+                  '       Time on the second lvl was ' + str(time2) + 'sec']
 
     fon = pygame.transform.scale(load_image('fon.jpg'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
@@ -327,3 +327,6 @@ def start_screen(time1, time2):
             end(time_1, time_2, time_3)
         pygame.display.flip()
         clock.tick(FPS)
+
+
+start_screen(23, 45.7870)

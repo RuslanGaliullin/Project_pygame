@@ -111,9 +111,9 @@ def generate_level(level):
 
 def start_screen(time):
     WIDTH, HEIGHT = 600, 600
-    intro_text = ['       time on the first lvl: ' + str(time) + 'sec',
-                  "       Level Two",
-                  "       Press to start",]
+    intro_text = ["       Level Two",
+                  "       Press to start", '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+                  '       Time on the first lvl was: ' + str(time) + 'sec']
 
     fon = pygame.transform.scale(load_image('fon.jpg'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
@@ -286,3 +286,6 @@ def start_screen(time):
             screen.blit(all_screens[1], (0, 0))
         pygame.display.flip()
         clock.tick(FPS)
+
+
+start_screen(45.7870)
